@@ -14,7 +14,8 @@
     "coordinates": {
       "lat": 45.5196,
       "lng": -73.5789
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "L'Express",
@@ -31,7 +32,8 @@
     "coordinates": {
       "lat": 45.5215,
       "lng": -73.5776
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Joe Beef",
@@ -48,7 +50,8 @@
     "coordinates": {
       "lat": 45.4766,
       "lng": -73.5712
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Wilensky's Light Lunch",
@@ -65,7 +68,8 @@
     "coordinates": {
       "lat": 45.5254,
       "lng": -73.5981
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Au Pied de Cochon",
@@ -82,7 +86,8 @@
     "coordinates": {
       "lat": 45.5221,
       "lng": -73.5794
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Fairmount Bagel",
@@ -99,7 +104,8 @@
     "coordinates": {
       "lat": 45.5261,
       "lng": -73.5994
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Bord'Elle",
@@ -116,7 +122,8 @@
     "coordinates": {
       "lat": 45.5093,
       "lng": -73.5708
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Datcha",
@@ -133,7 +140,8 @@
     "coordinates": {
       "lat": 45.4779,
       "lng": -73.57
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Bar Le Lab",
@@ -150,7 +158,8 @@
     "coordinates": {
       "lat": 45.5229,
       "lng": -73.582
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Café Cléopâtre",
@@ -167,7 +176,8 @@
     "coordinates": {
       "lat": 45.5122,
       "lng": -73.5598
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Pub L'Île Noire",
@@ -184,7 +194,8 @@
     "coordinates": {
       "lat": 45.516,
       "lng": -73.564
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Musée des Beaux-Arts de Montréal",
@@ -201,7 +212,8 @@
     "coordinates": {
       "lat": 45.4989,
       "lng": -73.5796
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Old Montréal",
@@ -218,7 +230,8 @@
     "coordinates": {
       "lat": 45.5075,
       "lng": -73.5543
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Pointe-à-Callière Museum",
@@ -235,7 +248,8 @@
     "coordinates": {
       "lat": 45.5077,
       "lng": -73.5556
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Plateau Murals Tour",
@@ -252,7 +266,8 @@
     "coordinates": {
       "lat": 45.5218,
       "lng": -73.5841
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "St-Joseph's Oratory",
@@ -269,7 +284,8 @@
     "coordinates": {
       "lat": 45.4924,
       "lng": -73.6178
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Montréal Biosphère",
@@ -286,7 +302,8 @@
     "coordinates": {
       "lat": 45.5108,
       "lng": -73.5317
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Mont-Royal Park",
@@ -303,7 +320,8 @@
     "coordinates": {
       "lat": 45.5048,
       "lng": -73.5878
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Jardin Botanique de Montréal",
@@ -320,7 +338,8 @@
     "coordinates": {
       "lat": 45.5594,
       "lng": -73.5568
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Parc Lafontaine",
@@ -337,7 +356,8 @@
     "coordinates": {
       "lat": 45.5278,
       "lng": -73.5712
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Îles de Boucherville National Park",
@@ -354,7 +374,8 @@
     "coordinates": {
       "lat": 45.5877,
       "lng": -73.45
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Lachine Canal",
@@ -371,7 +392,8 @@
     "coordinates": {
       "lat": 45.48,
       "lng": -73.576
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Marché Jean-Talon",
@@ -389,7 +411,8 @@
     "coordinates": {
       "lat": 45.5356,
       "lng": -73.6152
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Rue Mont-Royal",
@@ -406,7 +429,8 @@
     "coordinates": {
       "lat": 45.523,
       "lng": -73.5835
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Mile End Vintage Trail",
@@ -423,7 +447,8 @@
     "coordinates": {
       "lat": 45.5257,
       "lng": -73.5992
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Marché Atwater",
@@ -441,7 +466,8 @@
     "coordinates": {
       "lat": 45.4801,
       "lng": -73.578
-    }
+    },
+    "city": "montreal"
   },
   {
     "name": "Ogilvy on Sainte-Catherine",
@@ -458,6 +484,7 @@
     "coordinates": {
       "lat": 45.5017,
       "lng": -73.5718
-    }
+    },
+    "city": "montreal"
   }
 ]

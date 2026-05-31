@@ -25,11 +25,16 @@ const CAT_DUR: Record<string, string> = {
 };
 
 const DAY_THEMES: Record<string, string> = {
-  food: 'A Taste of Montréal',
+  food: 'A Taste of the City',
   nature: 'Into the Green',
   culture: 'Arts & Heritage',
   nightlife: 'After Dark',
   shopping: 'Shop the City',
+};
+
+const CITY_LABELS: Record<string, string> = {
+  montreal: 'Montréal',
+  toronto: 'Toronto',
 };
 
 interface PlaceDoc {
@@ -50,14 +55,29 @@ function parseCost(price: string): number {
   return Math.round((parseInt(nums[0]) + parseInt(nums[1])) / 2);
 }
 
-function assignTimes(count: number): string[] {
-  const slots = ['Morning', 'Afternoon', 'Evening'];
-  const times: string[] = [];
-  const perSlot = Math.ceil(count / 3);
-  for (const t of slots) {
-    for (let i = 0; i < perSlot && times.length < count; i++) times.push(t);
-  }
-  return times;
+const CAT_TIME_PREF: Record<string, string[]> = {
+  nightlife: ['Evening'],
+  food:      ['Morning', 'Afternoon', 'Evening'],
+  nature:    ['Morning', 'Afternoon'],
+  culture:   ['Morning', 'Afternoon'],
+  shopping:  ['Afternoon', 'Morning'],
+};
+
+function assignTimes(places: PlaceDoc[]): string[] {
+  const counts: Record<string, number> = { Morning: 0, Afternoon: 0, Evening: 0 };
+  const maxPerSlot = Math.ceil(places.length / 3);
+
+  return places.map((p) => {
+    const prefs = CAT_TIME_PREF[p.category] || ['Morning', 'Afternoon', 'Evening'];
+    for (const slot of prefs) {
+      if (counts[slot] < maxPerSlot) { counts[slot]++; return slot; }
+    }
+    const fallback = ['Morning', 'Afternoon', 'Evening'].reduce((a, b) =>
+      counts[a] <= counts[b] ? a : b
+    );
+    counts[fallback]++;
+    return fallback;
+  });
 }
 
 function getTheme(categories: string[]): string {
@@ -73,7 +93,7 @@ function buildItinerary(places: PlaceDoc[], req: GenerateRequest) {
 
   const days = Array.from({ length: req.days }, (_, d) => {
     const dayPlaces = selected.slice(d * target, (d + 1) * target);
-    const times = assignTimes(dayPlaces.length);
+    const times = assignTimes(dayPlaces);
     return {
       day: d + 1,
       theme: getTheme(dayPlaces.map((p) => p.category)),
@@ -92,14 +112,15 @@ function buildItinerary(places: PlaceDoc[], req: GenerateRequest) {
     };
   });
 
-  return { destination: 'Montréal', country: 'Canada', currency: '$', days };
+  const label = CITY_LABELS[req.destination] || req.destination;
+  return { destination: label, country: 'Canada', currency: '$', days };
 }
 
 async function fetchScoredPlaces(req: GenerateRequest): Promise<PlaceDoc[]> {
   const budget = BUDGET_MAP[req.budget] || 'Comfy';
   const tags = (req.interests || []).map((i) => INTEREST_TAG_MAP[i]).filter(Boolean);
 
-  const params = new URLSearchParams({ budget });
+  const params = new URLSearchParams({ budget, city: req.destination || 'montreal' });
   if (tags.length > 0) params.set('tags', [...new Set(tags)].join(','));
 
   const res = await fetch(`${BACKEND_URL}/places?${params.toString()}`);

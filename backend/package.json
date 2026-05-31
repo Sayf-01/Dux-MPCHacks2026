@@ -6,7 +6,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "seed": "ts-node scripts/seed.ts"
+    "seed": "ts-node scripts/seed.ts",
+    "seed:toronto": "ts-node scripts/seed-toronto.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",

@@ -1,11 +1,13 @@
 import { Schema, model, Document } from 'mongoose';
 
+export type City = 'montreal' | 'toronto';
 export type Category = 'food' | 'nightlife' | 'culture' | 'nature' | 'shopping';
 export type BudgetLevel = 'Easy' | 'Comfy' | 'Lavish';
 export type Tag = 'Food' | 'Nightlife' | 'Art & Museums' | 'Nature' | 'Shopping';
 
 export interface IPlace extends Document {
   name: string;
+  city: City;
   category: Category;
   address: string;
   phone: string;
@@ -23,6 +25,7 @@ export interface IPlace extends Document {
 const PlaceSchema = new Schema<IPlace>(
   {
     name: { type: String, required: true },
+    city: { type: String, required: true, enum: ['montreal', 'toronto'] },
     category: {
       type: String,
       required: true,

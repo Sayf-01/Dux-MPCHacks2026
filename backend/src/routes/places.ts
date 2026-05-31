@@ -1,13 +1,15 @@
 import { Router, Request, Response } from 'express';
-import { Place, BudgetLevel, Tag } from '../models/Place';
+import { Place, BudgetLevel, Tag, City } from '../models/Place';
 import { rankPlaces } from '../services/scoringEngine';
 
 const router = Router();
 
-// GET /places — list all, optional ?budget=&tags=
+// GET /places — list all, optional ?city=&budget=&tags=
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const places = await Place.find();
+    const city = req.query.city as City | undefined;
+    const filter = city ? { city } : {};
+    const places = await Place.find(filter);
 
     const budget = req.query.budget as BudgetLevel | undefined;
     const tagsParam = req.query.tags as string | undefined;
