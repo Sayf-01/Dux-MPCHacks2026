@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 interface HeaderProps {
   onLogoClick?: () => void;
@@ -28,9 +29,12 @@ export function Header({ onLogoClick }: HeaderProps) {
       </button>
 
       <nav className="hidden md:flex items-center">
-        <button className="px-4 py-2 rounded-full border border-line-2 text-sm font-bold text-ink hover:border-accent hover:-translate-y-0.5 transition shadow-card-sm">
+        <Link
+          href="/how-it-works"
+          className="px-4 py-2 rounded-full border border-line-2 text-sm font-bold text-ink hover:border-accent hover:-translate-y-0.5 transition shadow-card-sm"
+        >
           How it works
-        </button>
+        </Link>
       </nav>
     </header>
   );
