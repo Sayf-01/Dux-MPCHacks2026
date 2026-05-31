@@ -2,8 +2,8 @@
 import { useEffect, useRef, useState, RefObject } from 'react';
 import Image from 'next/image';
 
-const DUCK_SIZE = 85;
-const HEAD_VISIBLE = 36;
+const DUCK_SIZE = 96;
+const HEAD_VISIBLE = 48;
 
 interface Props {
   anchorRef: RefObject<HTMLElement | null>;

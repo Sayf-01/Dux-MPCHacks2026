@@ -20,10 +20,10 @@ export function Header({ onLogoClick }: HeaderProps) {
             <circle cx="9" cy="10" r="1.5" fill="#F5EFE6" />
           </svg>
         </div>
-        <div className="flex items-baseline gap-2">
+        <div className="flex items-center gap-2">
           <span className="font-display font-bold text-xl text-ink leading-none">DUX</span>
-          <span className="text-xs font-bold text-ink-3 tracking-widest uppercase leading-none">
-            Trip Studio
+          <span className="relative -top-px text-xs font-bold text-ink-3 tracking-widest uppercase leading-none">
+            TRAVEL GUIDE
           </span>
         </div>
       </button>
