@@ -1,0 +1,463 @@
+[
+  {
+    "name": "Schwartz's Deli",
+    "category": "food",
+    "address": "3895 Boul Saint-Laurent, Montréal, QC H2W 1X9",
+    "phone": "+1 514-842-4813",
+    "rating": 4.7,
+    "price": "10-20$",
+    "budgetLevel": "Easy",
+    "hours": "Sun–Thu 8am–12:30am, Fri–Sat 8am–1:30am",
+    "tags": [
+      "Food"
+    ],
+    "coordinates": {
+      "lat": 45.5196,
+      "lng": -73.5789
+    }
+  },
+  {
+    "name": "L'Express",
+    "category": "food",
+    "address": "3927 Rue Saint-Denis, Montréal, QC H2W 2M4",
+    "phone": "+1 514-845-5333",
+    "rating": 4.5,
+    "price": "30-50$",
+    "budgetLevel": "Comfy",
+    "hours": "Daily 8am–2am",
+    "tags": [
+      "Food"
+    ],
+    "coordinates": {
+      "lat": 45.5215,
+      "lng": -73.5776
+    }
+  },
+  {
+    "name": "Joe Beef",
+    "category": "food",
+    "address": "2491 Rue Notre-Dame O, Montréal, QC H3J 1N6",
+    "phone": "+1 514-935-6504",
+    "rating": 4.8,
+    "price": "80-120$",
+    "budgetLevel": "Lavish",
+    "hours": "Tue–Sat 6pm–10pm",
+    "tags": [
+      "Food"
+    ],
+    "coordinates": {
+      "lat": 45.4766,
+      "lng": -73.5712
+    }
+  },
+  {
+    "name": "Wilensky's Light Lunch",
+    "category": "food",
+    "address": "34 Av Fairmount O, Montréal, QC H2T 2M1",
+    "phone": "+1 514-271-0247",
+    "rating": 4.4,
+    "price": "5-15$",
+    "budgetLevel": "Easy",
+    "hours": "Mon–Fri 9am–4pm",
+    "tags": [
+      "Food"
+    ],
+    "coordinates": {
+      "lat": 45.5254,
+      "lng": -73.5981
+    }
+  },
+  {
+    "name": "Au Pied de Cochon",
+    "category": "food",
+    "address": "536 Av Duluth E, Montréal, QC H2L 1A9",
+    "phone": "+1 514-281-1114",
+    "rating": 4.6,
+    "price": "70-100$",
+    "budgetLevel": "Lavish",
+    "hours": "Tue–Sat 5pm–10pm",
+    "tags": [
+      "Food"
+    ],
+    "coordinates": {
+      "lat": 45.5221,
+      "lng": -73.5794
+    }
+  },
+  {
+    "name": "Fairmount Bagel",
+    "category": "food",
+    "address": "74 Av Fairmount O, Montréal, QC H2T 2M2",
+    "phone": "+1 514-272-0667",
+    "rating": 4.7,
+    "price": "5-10$",
+    "budgetLevel": "Easy",
+    "hours": "Daily 24 hours",
+    "tags": [
+      "Food"
+    ],
+    "coordinates": {
+      "lat": 45.5261,
+      "lng": -73.5994
+    }
+  },
+  {
+    "name": "Bord'Elle",
+    "category": "nightlife",
+    "address": "1, Rue Sherbrooke O, Montréal, QC H2X 3W4",
+    "phone": "+1 514-289-9334",
+    "rating": 4.5,
+    "price": "40-70$",
+    "budgetLevel": "Comfy",
+    "hours": "Tue–Sat 5pm–3am",
+    "tags": [
+      "Nightlife"
+    ],
+    "coordinates": {
+      "lat": 45.5093,
+      "lng": -73.5708
+    }
+  },
+  {
+    "name": "Datcha",
+    "category": "nightlife",
+    "address": "98 Av Atwater, Montréal, QC H4C 2G3",
+    "phone": "+1 514-439-1790",
+    "rating": 4.4,
+    "price": "20-40$",
+    "budgetLevel": "Comfy",
+    "hours": "Wed–Sat 9pm–3am",
+    "tags": [
+      "Nightlife"
+    ],
+    "coordinates": {
+      "lat": 45.4779,
+      "lng": -73.57
+    }
+  },
+  {
+    "name": "Bar Le Lab",
+    "category": "nightlife",
+    "address": "1351 Rue Rachel E, Montréal, QC H2J 2K1",
+    "phone": "+1 514-544-1333",
+    "rating": 4.6,
+    "price": "15-30$",
+    "budgetLevel": "Easy",
+    "hours": "Daily 5pm–3am",
+    "tags": [
+      "Nightlife"
+    ],
+    "coordinates": {
+      "lat": 45.5229,
+      "lng": -73.582
+    }
+  },
+  {
+    "name": "Café Cléopâtre",
+    "category": "nightlife",
+    "address": "1230 Boul Saint-Laurent, Montréal, QC H2X 2S6",
+    "phone": "+1 514-861-4708",
+    "rating": 4.3,
+    "price": "10-20$",
+    "budgetLevel": "Easy",
+    "hours": "Fri–Sat 9pm–3am",
+    "tags": [
+      "Nightlife"
+    ],
+    "coordinates": {
+      "lat": 45.5122,
+      "lng": -73.5598
+    }
+  },
+  {
+    "name": "Pub L'Île Noire",
+    "category": "nightlife",
+    "address": "342 Rue Ontario E, Montréal, QC H2X 1H6",
+    "phone": "+1 514-982-0866",
+    "rating": 4.4,
+    "price": "15-30$",
+    "budgetLevel": "Easy",
+    "hours": "Daily 3pm–3am",
+    "tags": [
+      "Nightlife"
+    ],
+    "coordinates": {
+      "lat": 45.516,
+      "lng": -73.564
+    }
+  },
+  {
+    "name": "Musée des Beaux-Arts de Montréal",
+    "category": "culture",
+    "address": "1380 Rue Sherbrooke O, Montréal, QC H3G 1J5",
+    "phone": "+1 514-285-2000",
+    "rating": 4.7,
+    "price": "0-25$",
+    "budgetLevel": "Easy",
+    "hours": "Tue–Sun 10am–5pm",
+    "tags": [
+      "Art & Museums"
+    ],
+    "coordinates": {
+      "lat": 45.4989,
+      "lng": -73.5796
+    }
+  },
+  {
+    "name": "Old Montréal",
+    "category": "culture",
+    "address": "Place Jacques-Cartier, Montréal, QC H2Y 1B5",
+    "phone": "+1 514-873-2015",
+    "rating": 4.8,
+    "price": "0$",
+    "budgetLevel": "Easy",
+    "hours": "Always open",
+    "tags": [
+      "Art & Museums"
+    ],
+    "coordinates": {
+      "lat": 45.5075,
+      "lng": -73.5543
+    }
+  },
+  {
+    "name": "Pointe-à-Callière Museum",
+    "category": "culture",
+    "address": "350 Place Royale, Montréal, QC H2Y 3Y5",
+    "phone": "+1 514-872-9150",
+    "rating": 4.6,
+    "price": "20-25$",
+    "budgetLevel": "Easy",
+    "hours": "Tue–Sun 10am–5pm",
+    "tags": [
+      "Art & Museums"
+    ],
+    "coordinates": {
+      "lat": 45.5077,
+      "lng": -73.5556
+    }
+  },
+  {
+    "name": "Plateau Murals Tour",
+    "category": "culture",
+    "address": "Boul Saint-Laurent & Rue Sherbrooke E, Montréal, QC H2L 1G8",
+    "phone": "+1 514-903-5757",
+    "rating": 4.9,
+    "price": "0$",
+    "budgetLevel": "Easy",
+    "hours": "Daylight hours",
+    "tags": [
+      "Art & Museums"
+    ],
+    "coordinates": {
+      "lat": 45.5218,
+      "lng": -73.5841
+    }
+  },
+  {
+    "name": "St-Joseph's Oratory",
+    "category": "culture",
+    "address": "3800 Ch Queen Mary, Montréal, QC H3V 1H6",
+    "phone": "+1 514-733-8211",
+    "rating": 4.7,
+    "price": "0$",
+    "budgetLevel": "Easy",
+    "hours": "Daily 7am–9pm",
+    "tags": [
+      "Art & Museums"
+    ],
+    "coordinates": {
+      "lat": 45.4924,
+      "lng": -73.6178
+    }
+  },
+  {
+    "name": "Montréal Biosphère",
+    "category": "culture",
+    "address": "160 Ch Tour de l'Isle, Montréal, QC H3C 4G8",
+    "phone": "+1 514-283-5000",
+    "rating": 4.4,
+    "price": "20-22$",
+    "budgetLevel": "Easy",
+    "hours": "Tue–Sun 10am–5pm",
+    "tags": [
+      "Art & Museums"
+    ],
+    "coordinates": {
+      "lat": 45.5108,
+      "lng": -73.5317
+    }
+  },
+  {
+    "name": "Mont-Royal Park",
+    "category": "nature",
+    "address": "1260 Ch Remembrance, Montréal, QC H3H 1A2",
+    "phone": "+1 514-843-8240",
+    "rating": 4.9,
+    "price": "0$",
+    "budgetLevel": "Easy",
+    "hours": "Always open",
+    "tags": [
+      "Nature"
+    ],
+    "coordinates": {
+      "lat": 45.5048,
+      "lng": -73.5878
+    }
+  },
+  {
+    "name": "Jardin Botanique de Montréal",
+    "category": "nature",
+    "address": "4101 Rue Sherbrooke E, Montréal, QC H1X 2B2",
+    "phone": "+1 514-872-1400",
+    "rating": 4.8,
+    "price": "20-22$",
+    "budgetLevel": "Easy",
+    "hours": "Daily 9am–5pm",
+    "tags": [
+      "Nature"
+    ],
+    "coordinates": {
+      "lat": 45.5594,
+      "lng": -73.5568
+    }
+  },
+  {
+    "name": "Parc Lafontaine",
+    "category": "nature",
+    "address": "3933 Av du Parc-La Fontaine, Montréal, QC H2L 3M2",
+    "phone": "+1 514-872-2644",
+    "rating": 4.7,
+    "price": "0$",
+    "budgetLevel": "Easy",
+    "hours": "Always open",
+    "tags": [
+      "Nature"
+    ],
+    "coordinates": {
+      "lat": 45.5278,
+      "lng": -73.5712
+    }
+  },
+  {
+    "name": "Îles de Boucherville National Park",
+    "category": "nature",
+    "address": "55 Île Sainte-Marguerite, Longueuil, QC J4G 1A1",
+    "phone": "+1 450-928-5088",
+    "rating": 4.6,
+    "price": "10-20$",
+    "budgetLevel": "Easy",
+    "hours": "May–Oct daily 8am–8pm",
+    "tags": [
+      "Nature"
+    ],
+    "coordinates": {
+      "lat": 45.5877,
+      "lng": -73.45
+    }
+  },
+  {
+    "name": "Lachine Canal",
+    "category": "nature",
+    "address": "1825 Boul Saint-Joseph, Lachine, QC H8S 2N6",
+    "phone": "+1 514-364-4490",
+    "rating": 4.6,
+    "price": "0$",
+    "budgetLevel": "Easy",
+    "hours": "Always open",
+    "tags": [
+      "Nature"
+    ],
+    "coordinates": {
+      "lat": 45.48,
+      "lng": -73.576
+    }
+  },
+  {
+    "name": "Marché Jean-Talon",
+    "category": "shopping",
+    "address": "7070 Av Henri-Julien, Montréal, QC H2S 3S3",
+    "phone": "+1 514-277-1588",
+    "rating": 4.8,
+    "price": "0-30$",
+    "budgetLevel": "Easy",
+    "hours": "Mon–Sun 7am–6pm",
+    "tags": [
+      "Shopping",
+      "Food"
+    ],
+    "coordinates": {
+      "lat": 45.5356,
+      "lng": -73.6152
+    }
+  },
+  {
+    "name": "Rue Mont-Royal",
+    "category": "shopping",
+    "address": "Rue Mont-Royal E, Montréal, QC H2J 1W8",
+    "phone": "+1 514-524-2754",
+    "rating": 4.5,
+    "price": "20-80$",
+    "budgetLevel": "Comfy",
+    "hours": "Daily 10am–8pm",
+    "tags": [
+      "Shopping"
+    ],
+    "coordinates": {
+      "lat": 45.523,
+      "lng": -73.5835
+    }
+  },
+  {
+    "name": "Mile End Vintage Trail",
+    "category": "shopping",
+    "address": "6052 Boul Saint-Laurent, Montréal, QC H2T 1S1",
+    "phone": "+1 514-270-3370",
+    "rating": 4.6,
+    "price": "5-40$",
+    "budgetLevel": "Easy",
+    "hours": "Daily 11am–7pm",
+    "tags": [
+      "Shopping"
+    ],
+    "coordinates": {
+      "lat": 45.5257,
+      "lng": -73.5992
+    }
+  },
+  {
+    "name": "Marché Atwater",
+    "category": "shopping",
+    "address": "138 Av Atwater, Montréal, QC H4C 2H6",
+    "phone": "+1 514-937-7754",
+    "rating": 4.7,
+    "price": "0-40$",
+    "budgetLevel": "Easy",
+    "hours": "Mon–Sun 7am–6pm",
+    "tags": [
+      "Shopping",
+      "Food"
+    ],
+    "coordinates": {
+      "lat": 45.4801,
+      "lng": -73.578
+    }
+  },
+  {
+    "name": "Ogilvy on Sainte-Catherine",
+    "category": "shopping",
+    "address": "1307 Rue Sainte-Catherine O, Montréal, QC H3G 1P7",
+    "phone": "+1 514-842-7711",
+    "rating": 4.5,
+    "price": "100-500$",
+    "budgetLevel": "Lavish",
+    "hours": "Mon–Sat 10am–7pm, Sun 11am–6pm",
+    "tags": [
+      "Shopping"
+    ],
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5718
+    }
+  }
+]
