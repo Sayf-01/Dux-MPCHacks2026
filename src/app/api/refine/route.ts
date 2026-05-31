@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateAIText } from '@/lib/ai/client';
+import Groq from 'groq-sdk';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4000';
 
@@ -75,6 +75,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Instruction is required' }, { status: 400 });
     }
 
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: 'DUXy is not configured (missing GROQ_API_KEY)' }, { status: 503 });
+    }
+
     const placesRes = await fetch(`${BACKEND_URL}/places?city=${city || 'montreal'}`);
     if (!placesRes.ok) throw new Error('Could not fetch places from backend');
     const places: PlaceDoc[] = await placesRes.json();
@@ -89,7 +94,19 @@ User instruction: "${instruction}"
 
 Return the complete modified itinerary as JSON.`;
 
-    const raw = await generateAIText({ systemPrompt: DUXY_SYSTEM, userPrompt });
+    const groq = new Groq({ apiKey });
+
+    const completion = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'system', content: DUXY_SYSTEM },
+        { role: 'user', content: userPrompt },
+      ],
+      response_format: { type: 'json_object' },
+      temperature: 0.3,
+    });
+
+    const raw = completion.choices[0]?.message?.content || '';
     const trip = parseLoose(raw);
 
     if (!trip) {
