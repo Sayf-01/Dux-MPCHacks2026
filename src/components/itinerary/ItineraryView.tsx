@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { TripItinerary, TimeSlot } from '@/types/itinerary';
 import { TripSummary } from './TripSummary';
 import { ExportButton } from './ExportButton';
@@ -32,10 +32,14 @@ export function ItineraryView({
   trip, req, refining, addingDay, note, swappingKey, onReset, onSwap, onRefine, onAddDay, onMoveActivity, onReorderActivity,
 }: ItineraryViewProps) {
   const [activeDay, setActiveDay] = useState(0);
+  const prevDayCount = useRef(trip.days.length);
 
-  // Auto-switch to newly added day
+  // Auto-switch to newly added day (not on initial mount)
   useEffect(() => {
-    setActiveDay(trip.days.length - 1);
+    if (trip.days.length > prevDayCount.current) {
+      setActiveDay(trip.days.length - 1);
+    }
+    prevDayCount.current = trip.days.length;
   }, [trip.days.length]);
   const [refineText, setRefineText] = useState('');
   const [summaryOpen, setSummaryOpen] = useState(false);

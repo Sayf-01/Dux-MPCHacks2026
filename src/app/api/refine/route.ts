@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Groq from 'groq-sdk';
+import { generateAIText } from '@/lib/ai/client';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4000';
 
@@ -28,7 +28,8 @@ Rules you MUST follow:
 6. Use the exact "name", "lat", and "lng" values from the Available Places list.
 7. For "blurb" write one vivid sentence about the place.
 8. For "dur" use one of: "30m", "1h", "1h 30m", "2h", "3h".
-9. For "cost" use a realistic per-person CAD estimate based on the price range.`;
+9. For "cost" use a realistic per-person CAD estimate based on the price range.
+10. Each place must appear AT MOST ONCE across the entire itinerary.`;
 
 interface PlaceDoc {
   name: string;
@@ -74,11 +75,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Instruction is required' }, { status: 400 });
     }
 
-    const apiKey = process.env.GROQ_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({ error: 'DUXy is not configured' }, { status: 503 });
-    }
-
     const placesRes = await fetch(`${BACKEND_URL}/places?city=${city || 'montreal'}`);
     if (!placesRes.ok) throw new Error('Could not fetch places from backend');
     const places: PlaceDoc[] = await placesRes.json();
@@ -93,19 +89,7 @@ User instruction: "${instruction}"
 
 Return the complete modified itinerary as JSON.`;
 
-    const groq = new Groq({ apiKey });
-
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: DUXY_SYSTEM },
-        { role: 'user', content: userPrompt },
-      ],
-      response_format: { type: 'json_object' },
-      temperature: 0.3,
-    });
-
-    const raw = completion.choices[0]?.message?.content || '';
+    const raw = await generateAIText({ systemPrompt: DUXY_SYSTEM, userPrompt });
     const trip = parseLoose(raw);
 
     if (!trip) {
