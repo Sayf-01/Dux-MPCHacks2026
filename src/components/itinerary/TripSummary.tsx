@@ -12,7 +12,7 @@ export function TripSummary({ trip }: TripSummaryProps) {
     { icon: '🗓', label: `${trip.days.length} ${trip.days.length === 1 ? 'Day' : 'Days'}` },
     { icon: '👥', label: `${trip.people} ${trip.people === 1 ? 'Traveler' : 'Travelers'}` },
     { icon: '⚡', label: capitalize(trip.pace) },
-    ...(total > 0 ? [{ icon: '💳', label: `${trip.currency}${total} Pp` }] : []),
+    ...(total > 0 ? [{ icon: '💳', label: `${trip.currency}${total}` }] : []),
   ];
 
   return (

@@ -53,26 +53,29 @@ export function ItineraryView({
           </button>
 
           <div className="flex-1 min-w-0">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-ink flex flex-wrap items-baseline gap-2 leading-tight">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-ink flex flex-wrap items-center gap-2 leading-tight">
               {trip.destination}
               {trip.country && (
-                <span className="text-xs font-extrabold uppercase tracking-wider bg-accent text-white px-3 py-1 rounded-full">
+                <span className="relative -top-px text-xs font-extrabold uppercase tracking-wider bg-accent text-white px-3 py-1 rounded-full leading-none">
                   {trip.country}
                 </span>
               )}
             </h2>
-            <TripSummary trip={trip} />
           </div>
 
           <div className="flex-shrink-0 hidden md:block">
             <ExportButton trip={trip} />
           </div>
+
+          <div className="w-full">
+            <TripSummary trip={trip} />
+          </div>
         </div>
       </div>
 
-      <div className="max-w-[1180px] mx-auto px-6 md:px-8">
+      <div className="max-w-[1180px] mx-auto px-6 md:px-8 mt-1">
         {/* Day tabs */}
-        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-none">
+        <div className="flex gap-3 overflow-x-auto pt-1 pb-8 scrollbar-none">
           {trip.days.map((d, i) => (
             <button
               key={i}
