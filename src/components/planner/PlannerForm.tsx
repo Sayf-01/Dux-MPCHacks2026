@@ -17,10 +17,7 @@ interface PlannerFormProps {
 export function PlannerForm({ form, onUpdate, onToggleInterest, onSubmit, isValid }: PlannerFormProps) {
   return (
     <div className="bg-surface border border-line rounded-3xl shadow-card p-7 flex flex-col gap-5">
-      <DestinationStep
-        value={form.destination}
-        onChange={(v) => onUpdate('destination', v)}
-      />
+      <DestinationStep />
 
       <DaysStep
         days={form.days}

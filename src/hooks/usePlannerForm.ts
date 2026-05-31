@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { PlannerFormData } from '@/types/planner';
 
 const defaults: PlannerFormData = {
-  destination: '',
+  destination: 'Montréal',
   days: 3,
   people: 2,
   budget: 'comfy',
@@ -27,7 +27,7 @@ export function usePlannerForm() {
     }));
   };
 
-  const isValid = form.destination.trim().length >= 2;
+  const isValid = form.interests.length >= 1;
 
   return { form, update, toggleInterest, isValid };
 }
