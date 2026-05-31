@@ -125,6 +125,7 @@ export default function Home() {
   const [swappingKey, setSwappingKey] = useState<string | null>(null);
   const formCardRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
+  const logisticsRef = useRef<HTMLElement>(null);
 
   const handleGenerate = () => {
     if (!isValid) return;
@@ -210,7 +211,7 @@ export default function Home() {
 
             <h1 className="font-display text-5xl md:text-6xl lg:text-[68px] font-semibold text-ink leading-[1.02] tracking-tight mb-5">
               Plan the trip,{' '}
-              <em className="not-italic text-accent italic">not the logistics.</em>
+              <em ref={logisticsRef} className="not-italic text-accent italic">not the logistics.</em>
             </h1>
 
             <p className="text-lg md:text-xl text-ink-2 leading-relaxed mb-8 font-medium max-w-[440px]">
@@ -229,7 +230,7 @@ export default function Home() {
 
           {/* Form card */}
           <div ref={formCardRef} className="relative z-[1]">
-            <DraggableDuck anchorRef={badgesRef} />
+            <DraggableDuck anchorRef={logisticsRef} />
             <PlannerForm
               form={form}
               onUpdate={update}

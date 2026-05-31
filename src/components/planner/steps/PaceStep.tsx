@@ -24,9 +24,10 @@ function LightningBolt() {
 export function PaceStep({ value, onChange }: PaceStepProps) {
   const paceLabel = (paceId: string, label: string) => {
     const boltCount = paceId === 'relaxed' ? 1 : paceId === 'balanced' ? 2 : 3;
+    const selected = value === paceId;
     return (
       <span className="inline-flex items-center gap-1">
-        <span className="inline-flex items-center -space-x-1 text-accent leading-none">
+        <span className={`inline-flex items-center -space-x-1 leading-none ${selected ? 'text-accent' : 'text-ink-3'}`}>
           {Array.from({ length: boltCount }).map((_, index) => (
             <LightningBolt key={index} />
           ))}

@@ -2,8 +2,7 @@
 import { useEffect, useRef, useState, RefObject } from 'react';
 import Image from 'next/image';
 
-const DUCK_SIZE = 96;
-const HEAD_VISIBLE = 48;
+const DUCK_SIZE = 62;
 
 interface Props {
   anchorRef: RefObject<HTMLElement | null>;
@@ -18,10 +17,11 @@ export function DraggableDuck({ anchorRef }: Props) {
 
   useEffect(() => {
     if (!anchorRef.current) return;
-    const rect = anchorRef.current.getBoundingClientRect();
+    const rects = anchorRef.current.getClientRects();
+    const lastLine = rects[rects.length - 1];
     setPos({
-      x: rect.left,
-      y: window.innerHeight - HEAD_VISIBLE,
+      x: lastLine.right + 8,
+      y: lastLine.top + (lastLine.height - DUCK_SIZE) / 2,
     });
     setReady(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
