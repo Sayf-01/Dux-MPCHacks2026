@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Riverside Bistro",
+    "longitude": -73.5673,
+    "latitude": 45.5017,
+    "address": "120 Saint-Paul St W, Montreal, QC",
+    "rating": 4.6,
+    "cuisine": "French",
+    "buildingType": "restaurant",
+    "openingTime": "08:00",
+    "closingTime": "22:00",
+    "phoneNumber": "+1-514-555-0101",
+    "url": "https://example.com/riverside-bistro"
+  },
+  {
+    "name": "Harbor Lights Bar",
+    "longitude": -73.5536,
+    "latitude": 45.5076,
+    "address": "88 Harbour Ave, Montreal, QC",
+    "rating": 4.3,
+    "cuisine": "Cocktails",
+    "buildingType": "bar",
+    "openingTime": "16:00",
+    "closingTime": "02:00",
+    "phoneNumber": "+1-514-555-0102",
+    "url": "https://example.com/harbor-lights-bar"
+  },
+  {
+    "name": "Neon Pulse Club",
+    "longitude": -73.5807,
+    "latitude": 45.4985,
+    "address": "250 Crescent St, Montreal, QC",
+    "rating": 4.1,
+    "cuisine": "Music & Drinks",
+    "buildingType": "club",
+    "openingTime": "21:00",
+    "closingTime": "03:00",
+    "phoneNumber": "+1-514-555-0103",
+    "url": "https://example.com/neon-pulse-club"
+  },
+  {
+    "name": "Maple Garden Cafe",
+    "longitude": -73.5792,
+    "latitude": 45.5048,
+    "address": "45 Peel St, Montreal, QC",
+    "rating": 4.8,
+    "cuisine": "Cafe",
+    "buildingType": "restaurant",
+    "openingTime": "07:30",
+    "closingTime": "20:30",
+    "phoneNumber": "+1-514-555-0104",
+    "url": "https://example.com/maple-garden-cafe"
+  },
+  {
+    "name": "Skyline Lounge",
+    "longitude": -73.5611,
+    "latitude": 45.5032,
+    "address": "310 René-Lévesque Blvd W, Montreal, QC",
+    "rating": 4.4,
+    "cuisine": "Lounge",
+    "buildingType": "bar",
+    "openingTime": "17:00",
+    "closingTime": "01:00",
+    "phoneNumber": "+1-514-555-0105",
+    "url": "https://example.com/skyline-lounge"
+  }
+]

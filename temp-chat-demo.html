@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chatbot Demo</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --user: #2563eb;
+      --bot: #374151;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1e293b, var(--bg));
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: min(960px, 100%);
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(37, 99, 235, 0.08));
+    }
+
+    h1 { margin: 0 0 6px; font-size: 24px; }
+    p { margin: 0; color: var(--muted); }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr auto auto;
+      gap: 12px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.75);
+    }
+
+    input, textarea, button {
+      font: inherit;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .chat {
+      height: 460px;
+      overflow: auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .chat-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      max-width: 100%;
+    }
+
+    .chat-row.user {
+      flex-direction: row-reverse;
+      align-self: flex-end;
+    }
+
+    .chat-row.bot {
+      align-self: flex-start;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(37, 99, 235, 0.28));
+      color: #e0f2fe;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .bubble {
+      max-width: min(680px, 85%);
+      padding: 14px 16px;
+      border-radius: 18px;
+      white-space: pre-wrap;
+      line-height: 1.45;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .bubble.user {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.26), rgba(59, 130, 246, 0.18));
+      border-color: rgba(59, 130, 246, 0.38);
+      border-bottom-right-radius: 6px;
+    }
+
+    .bubble.bot {
+      background: rgba(55, 65, 81, 0.82);
+      border-bottom-left-radius: 6px;
+    }
+
+    .bubble.system {
+      max-width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      align-self: center;
+    }
+
+    .meta {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .composer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 16px 24px 24px;
+      border-top: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .composer textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 150px;
+    }
+
+    button {
+      padding: 12px 16px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      border: none;
+      color: white;
+      font-weight: 600;
+    }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    .status {
+      padding: 0 24px 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .json {
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid var(--border);
+      overflow: auto;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .result-card {
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid var(--border);
+      display: grid;
+      gap: 12px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .mini-card {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid var(--border);
+    }
+
+    .mini-label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .mini-value {
+      font-size: 14px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+
+    .step-list {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+      color: var(--text);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: #dbeafe;
+      font-size: 12px;
+    }
+
+    .typing {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      min-height: 20px;
+    }
+
+    .typing span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #cbd5e1;
+      opacity: 0.6;
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes pulse {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.45; }
+      40% { transform: translateY(-3px); opacity: 1; }
+    }
+
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 24px 16px;
+      background: rgba(15, 23, 42, 0.55);
+    }
+
+    .quick-reply {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(31, 41, 55, 0.8);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Chatbot Demo</h1>
+      <p>Temporary UI for testing the AI chat endpoint against your itinerary.</p>
+    </header>
+
+    <div class="controls">
+      <input id="apiUrl" value="http://localhost:3002/api/chatbot" aria-label="API URL" />
+      <input id="botName" value="Trip planner AI" aria-label="Bot name" />
+      <button id="loadSample" class="secondary">Load sample</button>
+      <button id="clearChat" class="secondary">Clear chat</button>
+    </div>
+
+    <div id="chat" class="chat"></div>
+
+    <div class="quick-replies" id="quickReplies">
+      <button class="quick-reply" data-message="Replace the museum with something outdoors.">Replace the museum</button>
+      <button class="quick-reply" data-message="Make this plan cheaper and more family-friendly.">Cheaper + family friendly</button>
+      <button class="quick-reply" data-message="Remove the market and suggest another food stop.">Swap the food stop</button>
+    </div>
+
+    <div class="composer">
+      <textarea id="message" placeholder="Try: replace the museum with something outdoors..." aria-label="Message"></textarea>
+      <div class="actions">
+        <button id="sendBtn">Send</button>
+        <button id="sendSample" class="secondary">Send sample</button>
+      </div>
+    </div>
+
+    <div id="status" class="status">Ready.</div>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const statusEl = document.getElementById('status');
+    const apiUrlEl = document.getElementById('apiUrl');
+    const botNameEl = document.getElementById('botName');
+    const messageEl = document.getElementById('message');
+    const sendBtn = document.getElementById('sendBtn');
+    const sendSampleBtn = document.getElementById('sendSample');
+    const loadSampleBtn = document.getElementById('loadSample');
+    const clearChatBtn = document.getElementById('clearChat');
+    const quickRepliesEl = document.getElementById('quickReplies');
+
+    const sampleItinerary = {
+      tripName: 'Weekend in Montreal',
+      stops: [
+        { name: 'Montreal Museum of Fine Arts', category: 'museum', city: 'Montreal' },
+        { name: 'Old Port Walk', category: 'outdoor', city: 'Montreal' },
+        { name: 'Jean-Talon Market', category: 'food', city: 'Montreal' }
+      ]
+    };
+
+    let currentItinerary = JSON.parse(JSON.stringify(sampleItinerary));
+
+    const sampleMessage = 'Replace the museum with something outdoors.';
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    function initials(name) {
+      return String(name || '')
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0].toUpperCase())
+        .join('') || 'AI';
+    }
+
+    function addBubble(role, title, text) {
+      const row = document.createElement('div');
+      row.className = `chat-row ${role}`;
+
+      const avatar = document.createElement('div');
+      avatar.className = 'avatar';
+      avatar.textContent = initials(title);
+
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${role}`;
+      bubble.innerHTML = `<span class="meta">${title}</span>${escapeHtml(text)}`;
+
+      row.appendChild(avatar);
+      row.appendChild(bubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+      return row;
+    }
+
+    function addJson(title, value) {
+      const row = document.createElement('div');
+      row.className = 'chat-row bot';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'avatar';
+      avatar.textContent = 'AI';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble bot';
+      bubble.innerHTML = `<span class="meta">${title}</span><pre class="json">${escapeHtml(JSON.stringify(value, null, 2))}</pre>`;
+
+      row.appendChild(avatar);
+      row.appendChild(bubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function cloneItinerary(value) {
+      return JSON.parse(JSON.stringify(value || {}));
+    }
+
+    function addTypingIndicator() {
+      const row = document.createElement('div');
+      row.className = 'chat-row bot';
+      row.dataset.typing = 'true';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'avatar';
+      avatar.textContent = 'AI';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble bot';
+      bubble.innerHTML = `
+        <span class="meta">${botNameEl.value || 'Assistant'}</span>
+        <div class="typing" aria-label="Typing">
+          <span></span><span></span><span></span>
+        </div>
+      `;
+
+      row.appendChild(avatar);
+      row.appendChild(bubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+      return row;
+    }
+
+    function removeTypingIndicator() {
+      const typingRow = chat.querySelector('[data-typing="true"]');
+      if (typingRow) {
+        typingRow.remove();
+      }
+    }
+
+    function explainAnalysis(analysis) {
+      const target = analysis?.targetLocationName
+        ? `${analysis.targetLocationName}${analysis.targetLocationCategory ? ` (${analysis.targetLocationCategory})` : ''}`
+        : 'none';
+      const preferences = Array.isArray(analysis?.preferences) && analysis.preferences.length > 0
+        ? analysis.preferences.join(', ')
+        : 'none';
+
+      return [
+        `Intent: ${analysis?.intent || 'unknown'}`,
+        `Target: ${target}`,
+        `Preferences: ${preferences}`,
+        `Needs clarification: ${analysis?.needsClarification ? 'yes' : 'no'}`,
+        `Suggested replacement: ${analysis?.suggestedReplacement?.name || 'none'}`
+      ];
+    }
+
+    function buildProcessSteps(data, payload) {
+      const analysis = data?.analysis || {};
+      return [
+        `Read user message: "${payload.message}"`,
+        `Detect intent -> ${analysis.intent || 'unknown'}`,
+        `Extract preferences -> ${(analysis.preferences || []).join(', ') || 'none'}`,
+        `Match itinerary target -> ${analysis.targetLocationName || 'none'}`,
+        `Return structured JSON -> ${data?.source || 'unknown source'}`
+      ];
+    }
+
+    function renderResponseCard(title, data, payload) {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble bot';
+
+      const analysis = data?.analysis || {};
+      const processSteps = buildProcessSteps(data, payload);
+      const rawJson = JSON.stringify(data, null, 2);
+
+      bubble.innerHTML = `
+        <span class="meta">${title}</span>
+        <div class="result-card">
+          ${analysis?.humanReply ? `
+            <div class="mini-card">
+              <span class="mini-label">Assistant</span>
+              <div class="mini-value">${escapeHtml(analysis.humanReply)}</div>
+            </div>
+          ` : ''}
+          <div class="result-grid">
+            <div class="mini-card">
+              <span class="mini-label">What the bot understood</span>
+              <div class="mini-value">${escapeHtml(analysis.reply || 'No reply returned.')}</div>
+            </div>
+            <div class="mini-card">
+              <span class="mini-label">JSON query summary</span>
+              <div class="mini-value">${escapeHtml(explainAnalysis(analysis).join('\n'))}</div>
+            </div>
+          </div>
+          ${analysis?.suggestedReplacement ? `
+            <div class="mini-card">
+              <span class="mini-label">Suggested place</span>
+              <div class="mini-value">${escapeHtml(`${analysis.suggestedReplacement.name}\n${analysis.suggestedReplacement.address}\nRating: ${analysis.suggestedReplacement.rating} • ${analysis.suggestedReplacement.buildingType}`)}</div>
+            </div>
+          ` : ''}
+          ${analysis?.suggestedReplacement ? `
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="secondary" data-action="apply">Apply suggestion</button>
+              <div style="color:var(--muted);font-size:12px">Click to replace the target stop with the suggested place.</div>
+            </div>
+          ` : ''}
+          <div class="mini-card">
+            <span class="mini-label">JSON query process</span>
+            <ol class="step-list">
+              ${processSteps.map((step) => `<li>${escapeHtml(step)}</li>`).join('')}
+            </ol>
+          </div>
+          ${data?.updatedItinerary ? `
+            <div class="mini-card">
+              <span class="mini-label">Updated itinerary</span>
+              <pre class="json">${escapeHtml(JSON.stringify(data.updatedItinerary, null, 2))}</pre>
+            </div>
+          ` : ''}
+          <div class="mini-card">
+            <span class="mini-label">Raw JSON</span>
+            <pre class="json response-json">${escapeHtml(rawJson)}</pre>
+          </div>
+          ${Array.isArray(analysis.preferences) && analysis.preferences.length > 0 ? `
+            <div class="mini-card">
+              <span class="mini-label">Parsed preferences</span>
+              <div class="pill-row">
+                ${analysis.preferences.map((preference) => `<span class="pill">${escapeHtml(preference)}</span>`).join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+
+      chat.appendChild(bubble);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function setStatus(text) {
+      statusEl.textContent = text;
+    }
+
+    function seedDemo() {
+      chat.innerHTML = '';
+      currentItinerary = cloneItinerary(sampleItinerary);
+      addBubble('bot', botNameEl.value || 'Assistant', 'Hey — I can read your request, turn it into JSON, and show you the result like a real chat.');
+      addJson('Active itinerary', currentItinerary);
+      setStatus('Ready. Active itinerary reset.');
+    }
+
+    async function sendMessage(message) {
+      const apiUrl = apiUrlEl.value.trim();
+      if (!apiUrl) {
+        setStatus('Please enter an API URL.');
+        return;
+      }
+
+      const payload = {
+        message,
+        currentItinerary
+      };
+
+      addBubble('user', 'You', message);
+      setStatus('Sending...');
+      sendBtn.disabled = true;
+      sendSampleBtn.disabled = true;
+      const typingRow = addTypingIndicator();
+
+      try {
+        await sleep(450);
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        typingRow.remove();
+        renderResponseCard(response.ok ? 'Bot response' : 'Error response', data, payload);
+        if (response.ok && data?.updatedItinerary) {
+          currentItinerary = cloneItinerary(data.updatedItinerary);
+          addJson('Active itinerary updated', currentItinerary);
+        }
+        setStatus(response.ok ? `Done via ${data.source}.` : `Request failed with ${response.status}.`);
+      } catch (error) {
+        typingRow.remove();
+        addBubble('bot', 'Error', error.message || 'Failed to reach the server.');
+        setStatus('Could not reach the chatbot API.');
+      } finally {
+        sendBtn.disabled = false;
+        sendSampleBtn.disabled = false;
+      }
+    }
+
+    sendBtn.addEventListener('click', () => {
+      const message = messageEl.value.trim();
+      if (!message) {
+        setStatus('Type a message first.');
+        return;
+      }
+      sendMessage(message);
+    });
+
+    sendSampleBtn.addEventListener('click', () => sendMessage(sampleMessage));
+    quickRepliesEl.addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-message]');
+      if (!button) {
+        return;
+      }
+
+      messageEl.value = button.dataset.message || '';
+      sendMessage(messageEl.value.trim());
+    });
+    loadSampleBtn.addEventListener('click', () => {
+      messageEl.value = sampleMessage;
+      setStatus('Sample message loaded.');
+    });
+    clearChatBtn.addEventListener('click', seedDemo);
+
+    messageEl.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendBtn.click();
+      }
+    });
+
+    seedDemo();
+
+    // Handle Apply suggestion clicks inside result cards
+    chat.addEventListener('click', async (event) => {
+      const btn = event.target.closest('button[data-action="apply"]');
+      if (!btn) return;
+
+      const card = btn.closest('.result-card');
+      const rawEl = card ? card.querySelector('.response-json') : null;
+      if (!rawEl) return;
+      const rawJson = rawEl.textContent;
+      let data;
+      try {
+        data = JSON.parse(rawJson);
+      } catch (e) {
+        setStatus('Failed to parse response JSON.');
+        return;
+      }
+
+      const apiUrl = apiUrlEl.value.trim();
+      if (!apiUrl) {
+        setStatus('Please enter an API URL.');
+        return;
+      }
+
+      const payload = {
+        message: payloadForApplyMessage(),
+        currentItinerary,
+        apply: true
+      };
+
+      // Send apply request
+      setStatus('Applying suggestion...');
+      btn.disabled = true;
+      try {
+        const resp = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await resp.json();
+        renderResponseCard(resp.ok ? 'Applied suggestion' : 'Apply failed', result, payload);
+        if (resp.ok && result?.updatedItinerary) {
+          currentItinerary = cloneItinerary(result.updatedItinerary);
+          addJson('Active itinerary updated', currentItinerary);
+          btn.textContent = 'Applied';
+          setStatus('Suggestion applied. Active itinerary updated.');
+        } else {
+          btn.disabled = false;
+          setStatus(resp.ok ? 'Suggestion processed.' : `Apply failed: ${resp.status}`);
+        }
+      } catch (err) {
+        btn.disabled = false;
+        setStatus('Failed to apply suggestion.');
+      }
+    });
+
+    function payloadForApplyMessage() {
+      // Use the message box if filled, otherwise use the last user message from the chat
+      const m = messageEl.value.trim();
+      if (m) return m;
+      const userBubbles = chat.querySelectorAll('.chat-row.user .bubble');
+      if (userBubbles && userBubbles.length) {
+        return userBubbles[userBubbles.length - 1].textContent || sampleMessage;
+      }
+      return sampleMessage;
+    }
+  </script>
+</body>
+</html>
