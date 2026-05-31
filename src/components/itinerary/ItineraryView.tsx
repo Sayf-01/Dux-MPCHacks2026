@@ -10,7 +10,6 @@ const REFINE_CHIPS = [
   'More relaxed',
   'More food',
   'Cheaper',
-  'Hidden gems',
   'More nightlife',
 ];
 

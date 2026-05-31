@@ -43,13 +43,6 @@ export function PlannerForm({ form, onUpdate, onToggleInterest, onSubmit, isVali
         disabled={!isValid}
         className="mt-1 h-16 rounded-full bg-accent text-white text-lg font-extrabold flex items-center justify-center gap-3 shadow-btn hover:-translate-y-0.5 hover:shadow-btn-hover active:translate-y-1 active:shadow-none transition disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-btn"
       >
-        <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-          <path
-            fillRule="evenodd"
-            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-            clipRule="evenodd"
-          />
-        </svg>
         Build my trip
         <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
           <path

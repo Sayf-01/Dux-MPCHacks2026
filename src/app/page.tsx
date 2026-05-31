@@ -200,9 +200,9 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 xl:gap-16 items-center min-h-[calc(100vh-80px)] py-8 pb-16">
           {/* Hero copy */}
           <div className="max-w-xl">
-            <div className="inline-flex items-center gap-2 text-[11px] font-extrabold text-accent-ink bg-accent-soft px-4 py-2 rounded-full mb-6 uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-              AI Itineraries, Hand-Built Feel
+            <div className="inline-flex items-center gap-2 bg-surface border border-line px-4 py-2.5 rounded-full shadow-card-sm mb-6">
+              <span className="text-accent text-base">✦</span>
+              <span className="text-ink text-sm font-extrabold">AI Itineraries, Hand-Built Feel</span>
             </div>
 
             <h1 className="font-display text-5xl md:text-6xl lg:text-[68px] font-semibold text-ink leading-[1.02] tracking-tight mb-5">

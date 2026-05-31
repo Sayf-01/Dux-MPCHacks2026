@@ -7,8 +7,7 @@ export type InterestId =
   | 'nature'
   | 'nightlife'
   | 'shopping'
-  | 'hidden'
-  | 'views';
+  ;
 
 export interface PlannerFormData {
   destination: string;
