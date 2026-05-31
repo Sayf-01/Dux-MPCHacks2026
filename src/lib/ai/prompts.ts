@@ -4,6 +4,11 @@ import { PACE_TARGETS } from '@/constants/budget';
 export const SYSTEM_PROMPT =
   'You are DUX, an expert local travel planner. Output ONLY valid minified JSON, no prose, no markdown fences.';
 
+const CITY_FULL_NAMES: Record<string, string> = {
+  montreal: 'Montréal, QC, Canada',
+  toronto: 'Toronto, ON, Canada',
+};
+
 export interface PlaceContext {
   name: string;
   category: string;
@@ -20,7 +25,9 @@ export function buildItineraryPrompt(req: GenerateRequest, places?: PlaceContext
   const target = PACE_TARGETS[req.pace] || 4;
   const schema = `{"destination":string,"country":string,"currency":string(symbol only e.g. $ or €),"days":[{"day":int,"theme":short string,"area":"Neighborhood A · Neighborhood B","weather":{"icon":"sun"|"cloud"|"rain","temp":int celsius,"label":short string},"activities":[{"name":string,"category":"attraction"|"food"|"nature"|"art"|"nightlife"|"views"|"shopping"|"hidden","time":"Morning"|"Afternoon"|"Evening","cost":int local currency per person,"dur":"1h"|"45m"|"2h","lat":real number,"lng":real number,"blurb":one vivid sentence}]}]}`;
 
-  let prompt = `Plan a ${req.days}-day trip to Montréal, QC, Canada for ${req.people} traveler(s). Budget: ${req.budget}. Pace: ${req.pace} (~${target} stops/day spread across Morning/Afternoon/Evening). Interests: ${(req.interests || []).join(', ') || 'general'}.`;
+  const destinationLabel = CITY_FULL_NAMES[req.destination?.toLowerCase()] || req.destination;
+
+  let prompt = `Plan a ${req.days}-day trip to ${destinationLabel} for ${req.people} traveler(s). Budget: ${req.budget}. Pace: ${req.pace} (~${target} stops/day spread across Morning/Afternoon/Evening). Interests: ${(req.interests || []).join(', ') || 'general'}.`;
 
   if (places && places.length > 0) {
     const list = places
@@ -30,7 +37,7 @@ export function buildItineraryPrompt(req: GenerateRequest, places?: PlaceContext
       )
       .join('\n');
 
-    prompt += ` IMPORTANT: You MUST select activities ONLY from this curated Montréal place list. Do NOT invent any other places. Use the exact name, lat, and lng values provided.\n\nAvailable places:\n${list}\n`;
+    prompt += ` IMPORTANT: You MUST select activities ONLY from this curated ${destinationLabel} place list. Do NOT invent any other places. Use the exact name, lat, and lng values provided.\n\nAvailable places:\n${list}\n`;
   }
 
   prompt += ` Return exactly ${req.days} days. Schema: ${schema}`;

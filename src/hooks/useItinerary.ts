@@ -1,6 +1,6 @@
 'use client';
 import { useState, useCallback } from 'react';
-import { TripItinerary, Activity, Day } from '@/types/itinerary';
+import { TripItinerary, Activity, Day, TimeSlot } from '@/types/itinerary';
 
 export type Screen = 'form' | 'generating' | 'result';
 
@@ -172,6 +172,57 @@ export function useItinerary() {
     }
   }, [trip]);
 
+  const moveActivity = useCallback((dayIdx: number, actKey: string, newTime: TimeSlot) => {
+    setTrip(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        days: prev.days.map((day, i) => {
+          if (i !== dayIdx) return day;
+          return {
+            ...day,
+            activities: day.activities
+              .map(a => a._k === actKey ? { ...a, time: newTime } : a)
+              .sort((x, y) => TIME_ORDER.indexOf(x.time) - TIME_ORDER.indexOf(y.time)),
+          };
+        }),
+      };
+    });
+  }, []);
+
+  const reorderActivity = useCallback((
+    dayIdx: number,
+    actKey: string,
+    targetKey: string,
+    position: 'before' | 'after',
+    newTime: TimeSlot,
+  ) => {
+    setTrip(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        days: prev.days.map((day, i) => {
+          if (i !== dayIdx) return day;
+          const dragged = day.activities.find(a => a._k === actKey);
+          if (!dragged) return day;
+          const rest = day.activities.filter(a => a._k !== actKey);
+          const targetIdx = rest.findIndex(a => a._k === targetKey);
+          if (targetIdx === -1) return day;
+          const insertAt = position === 'before' ? targetIdx : targetIdx + 1;
+          const reordered = [
+            ...rest.slice(0, insertAt),
+            { ...dragged, time: newTime },
+            ...rest.slice(insertAt),
+          ];
+          return {
+            ...day,
+            activities: reordered.sort((x, y) => TIME_ORDER.indexOf(x.time) - TIME_ORDER.indexOf(y.time)),
+          };
+        }),
+      };
+    });
+  }, []);
+
   const reset = useCallback(() => {
     setScreen('form');
     setTrip(null);
@@ -179,5 +230,5 @@ export function useItinerary() {
     setNote('');
   }, []);
 
-  return { screen, trip, error, note, refining, generate, refine, swapActivity, reset };
+  return { screen, trip, error, note, refining, generate, refine, swapActivity, moveActivity, reorderActivity, reset };
 }

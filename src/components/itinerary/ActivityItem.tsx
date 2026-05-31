@@ -37,16 +37,24 @@ interface ActivityItemProps {
   activity: Activity;
   currency: string;
   isSwapping?: boolean;
+  isDragging?: boolean;
   onSwap?: () => void;
+  onDragStart?: (e: React.DragEvent) => void;
+  onDragEnd?: () => void;
 }
 
-export function ActivityItem({ activity, currency, isSwapping, onSwap }: ActivityItemProps) {
+export function ActivityItem({ activity, currency, isSwapping, isDragging, onSwap, onDragStart, onDragEnd }: ActivityItemProps) {
   const badge = CAT_BADGE[activity.category] ?? CAT_BADGE.attraction;
 
   return (
     <div
-      className={`group flex items-start gap-4 bg-surface border border-line rounded-2xl p-4 transition-all duration-200 hover:border-accent hover:-translate-y-0.5 hover:shadow-card ${
-        isSwapping ? 'opacity-0 translate-y-2 scale-95' : 'opacity-100'
+      draggable={!!onDragStart}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      className={`group flex items-start gap-4 bg-surface border border-line rounded-2xl p-4 transition-all duration-200 cursor-grab active:cursor-grabbing ${
+        isSwapping ? 'opacity-0 translate-y-2 scale-95' :
+        isDragging  ? 'opacity-40 scale-95 shadow-none' :
+        'opacity-100 hover:border-accent hover:-translate-y-0.5 hover:shadow-card'
       }`}
     >
       {/* Category icon */}

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GenerateRequest } from '@/types/api';
+import { generateAIText } from '@/lib/ai/client';
+import { buildItineraryPrompt, SYSTEM_PROMPT, PlaceContext } from '@/lib/ai/prompts';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4000';
 
@@ -80,24 +82,25 @@ function assignTimes(places: PlaceDoc[]): string[] {
   });
 }
 
-function getTheme(categories: string[]): string {
+function getTheme(categories: string[], cityLabel: string): string {
   const counts: Record<string, number> = {};
   for (const c of categories) counts[c] = (counts[c] || 0) + 1;
   const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'culture';
-  return DAY_THEMES[top] || 'Montréal Highlights';
+  return DAY_THEMES[top] || `${cityLabel} Highlights`;
 }
 
 function buildItinerary(places: PlaceDoc[], req: GenerateRequest) {
   const target = PACE_TARGETS[req.pace] || 4;
   const selected = places.slice(0, req.days * target);
+  const cityLabel = CITY_LABELS[req.destination] || req.destination;
 
   const days = Array.from({ length: req.days }, (_, d) => {
     const dayPlaces = selected.slice(d * target, (d + 1) * target);
     const times = assignTimes(dayPlaces);
     return {
       day: d + 1,
-      theme: getTheme(dayPlaces.map((p) => p.category)),
-      area: 'Montréal',
+      theme: getTheme(dayPlaces.map((p) => p.category), cityLabel),
+      area: cityLabel,
       weather: { icon: 'sun', temp: 21, label: 'Clear' },
       activities: dayPlaces.map((p, i) => ({
         name: p.name,
@@ -137,6 +140,34 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No places found for your preferences' }, { status: 404 });
     }
 
+    // Try AI generation first
+    try {
+      const placeContexts: PlaceContext[] = places.map((p) => ({
+        name: p.name,
+        category: p.category,
+        hours: p.hours,
+        price: p.price,
+        rating: p.rating,
+        lat: p.coordinates.lat,
+        lng: p.coordinates.lng,
+        budgetLevel: p.budgetLevel,
+        tags: p.tags,
+      }));
+
+      const userPrompt = buildItineraryPrompt(body, placeContexts);
+      const raw = await generateAIText({ systemPrompt: SYSTEM_PROMPT, userPrompt });
+
+      const start = raw.indexOf('{');
+      const end = raw.lastIndexOf('}');
+      if (start >= 0 && end >= 0) {
+        const trip = JSON.parse(raw.slice(start, end + 1));
+        return NextResponse.json({ trip });
+      }
+    } catch (aiErr) {
+      console.warn('[itinerary] AI generation failed, falling back to manual build:', aiErr);
+    }
+
+    // Fallback: manual build
     const trip = buildItinerary(places, body);
     return NextResponse.json({ trip });
   } catch (err) {

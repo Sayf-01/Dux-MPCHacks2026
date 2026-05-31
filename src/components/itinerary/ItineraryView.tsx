@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { TripItinerary } from '@/types/itinerary';
+import { TripItinerary, TimeSlot } from '@/types/itinerary';
 import { TripSummary } from './TripSummary';
 import { ExportButton } from './ExportButton';
 import { DayCard } from './DayCard';
@@ -22,10 +22,12 @@ interface ItineraryViewProps {
   onReset: () => void;
   onSwap: (dayIdx: number, key: string) => void;
   onRefine: (instr: string) => void;
+  onMoveActivity: (dayIdx: number, actKey: string, newTime: TimeSlot) => void;
+  onReorderActivity: (dayIdx: number, actKey: string, targetKey: string, position: 'before' | 'after', newTime: TimeSlot) => void;
 }
 
 export function ItineraryView({
-  trip, req, refining, note, swappingKey, onReset, onSwap, onRefine,
+  trip, req, refining, note, swappingKey, onReset, onSwap, onRefine, onMoveActivity, onReorderActivity,
 }: ItineraryViewProps) {
   const [activeDay, setActiveDay] = useState(0);
   const [refineText, setRefineText] = useState('');
@@ -140,10 +142,13 @@ export function ItineraryView({
           <div>
             {day && (
               <DayCard
+                key={day.day}
                 day={day}
                 currency={trip.currency}
                 swappingKey={swappingKey}
                 onSwap={(key) => onSwap(activeDay, key)}
+                onMoveActivity={(actKey, newTime) => onMoveActivity(activeDay, actKey, newTime)}
+                onReorderActivity={(actKey, targetKey, position, newTime) => onReorderActivity(activeDay, actKey, targetKey, position, newTime)}
               />
             )}
           </div>

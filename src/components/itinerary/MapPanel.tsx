@@ -36,6 +36,16 @@ export function MapPanel({ activities, area }: MapPanelProps) {
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
+      if (geoActs.length > 1) {
+        const latlngs = geoActs.map((a) => [a.lat!, a.lng!] as [number, number]);
+        L.polyline(latlngs, {
+          color: '#e53935',
+          weight: 2,
+          dashArray: '6 6',
+          opacity: 0.85,
+        }).addTo(map);
+      }
+
       geoActs.forEach((act, i) => {
         const icon = L.divIcon({
           className: '',
