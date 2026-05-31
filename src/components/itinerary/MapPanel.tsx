@@ -39,7 +39,7 @@ export function MapPanel({ activities, area }: MapPanelProps) {
       geoActs.forEach((act, i) => {
         const icon = L.divIcon({
           className: '',
-          html: `<div style="width:28px;height:28px;border-radius:50%;background:#7C2D3A;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.3);font-family:system-ui,sans-serif">${i + 1}</div>`,
+          html: `<div style="width:28px;height:28px;border-radius:50%;background:#FFD74E;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.3);font-family:system-ui,sans-serif">${i + 1}</div>`,
           iconSize: [28, 28],
           iconAnchor: [14, 14],
         });
