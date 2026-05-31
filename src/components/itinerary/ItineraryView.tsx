@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TripItinerary, TimeSlot } from '@/types/itinerary';
 import { TripSummary } from './TripSummary';
 import { ExportButton } from './ExportButton';
@@ -17,19 +17,26 @@ interface ItineraryViewProps {
   trip: TripItinerary;
   req: { destination: string; days: number; people: number; budget: string; pace: string; interests: string[] };
   refining: boolean;
+  addingDay: boolean;
   note: string;
   swappingKey?: string | null;
   onReset: () => void;
   onSwap: (dayIdx: number, key: string) => void;
   onRefine: (instr: string) => void;
+  onAddDay: () => void;
   onMoveActivity: (dayIdx: number, actKey: string, newTime: TimeSlot) => void;
   onReorderActivity: (dayIdx: number, actKey: string, targetKey: string, position: 'before' | 'after', newTime: TimeSlot) => void;
 }
 
 export function ItineraryView({
-  trip, req, refining, note, swappingKey, onReset, onSwap, onRefine, onMoveActivity, onReorderActivity,
+  trip, req, refining, addingDay, note, swappingKey, onReset, onSwap, onRefine, onAddDay, onMoveActivity, onReorderActivity,
 }: ItineraryViewProps) {
   const [activeDay, setActiveDay] = useState(0);
+
+  // Auto-switch to newly added day
+  useEffect(() => {
+    setActiveDay(trip.days.length - 1);
+  }, [trip.days.length]);
   const [refineText, setRefineText] = useState('');
   const [summaryOpen, setSummaryOpen] = useState(false);
   const day = trip.days[activeDay];
@@ -106,7 +113,7 @@ export function ItineraryView({
         </div>
 
         {/* Day tabs */}
-        <div className="flex gap-3 overflow-x-auto pt-1 pb-8 scrollbar-none">
+        <div className="flex gap-3 overflow-x-auto pt-1 pb-8 scrollbar-none items-center">
           {trip.days.map((d, i) => (
             <button
               key={i}
@@ -125,6 +132,22 @@ export function ItineraryView({
               </span>
             </button>
           ))}
+
+          {/* Add day button */}
+          <button
+            onClick={onAddDay}
+            disabled={addingDay}
+            title="Add another day"
+            className="flex-shrink-0 w-10 h-10 rounded-full border-2 border-dashed border-line-2 bg-surface hover:border-accent hover:bg-accent-soft text-ink-3 hover:text-accent flex items-center justify-center transition hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            {addingDay ? (
+              <div className="w-4 h-4 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
+            ) : (
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+            )}
+          </button>
         </div>
 
         {/* Refine note */}

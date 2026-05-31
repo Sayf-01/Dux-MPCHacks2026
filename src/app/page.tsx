@@ -121,7 +121,7 @@ function GeneratingScreen({
 
 export default function Home() {
   const { form, update, toggleInterest, isValid } = usePlannerForm();
-  const { screen, trip, error, note, refining, generate, refine, swapActivity, moveActivity, reorderActivity, reset } = useItinerary();
+  const { screen, trip, error, note, refining, addingDay, generate, refine, addDay, swapActivity, moveActivity, reorderActivity, reset } = useItinerary();
   const [swappingKey, setSwappingKey] = useState<string | null>(null);
   const formCardRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
@@ -177,11 +177,13 @@ export default function Home() {
           interests: form.interests,
         }}
         refining={refining}
+        addingDay={addingDay}
         note={error || note}
         swappingKey={swappingKey}
         onReset={reset}
         onSwap={handleSwap}
         onRefine={handleRefine}
+        onAddDay={() => addDay(form.destination, form.interests)}
         onMoveActivity={(dayIdx, actKey, newTime) => moveActivity(dayIdx, actKey, newTime)}
         onReorderActivity={(dayIdx, actKey, targetKey, position, newTime) => reorderActivity(dayIdx, actKey, targetKey, position, newTime)}
       />
