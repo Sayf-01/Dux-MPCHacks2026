@@ -66,6 +66,7 @@ export function useItinerary() {
   const [error, setError] = useState('');
   const [note, setNote] = useState('');
   const [refining, setRefining] = useState(false);
+  const [addingDay, setAddingDay] = useState(false);
 
   const generate = useCallback(async (req: {
     destination: string;
@@ -237,6 +238,60 @@ export function useItinerary() {
     });
   }, []);
 
+  const addDay = useCallback(async (city: string, interests: string[]) => {
+    if (!trip) return;
+    setAddingDay(true);
+    setNote('');
+    try {
+      const usedPlaceNames = trip.days.flatMap((d) => d.activities.map((a) => a.name));
+      const res = await fetch('/api/add-day', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          city,
+          budget: trip.budget,
+          pace: trip.pace,
+          interests,
+          nextDayNumber: trip.days.length + 1,
+          usedPlaceNames,
+        }),
+      });
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const raw = data.day as any;
+      const newDay: Day = {
+        day: trip.days.length + 1,
+        theme: raw.theme || 'More to Explore',
+        area: raw.area || trip.destination,
+        weather: {
+          icon: ['sun', 'cloud', 'rain'].includes(raw.weather?.icon) ? raw.weather.icon : 'sun',
+          temp: raw.weather?.temp ?? 21,
+          label: raw.weather?.label || 'Clear',
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        activities: ((raw.activities || []) as any[]).map((a: any, j: number): Activity => ({
+          _k: `add-${trip.days.length}-${j}-${Math.random().toString(36).slice(2)}`,
+          name: a.name || 'Local spot',
+          category: normCat(a.category),
+          time: TIME_ORDER.includes(a.time) ? a.time : 'Afternoon',
+          cost: Math.max(0, parseInt(a.cost) || 0),
+          dur: a.dur || '1h',
+          lat: typeof a.lat === 'number' ? a.lat : a.lat ? parseFloat(a.lat) : undefined,
+          lng: typeof a.lng === 'number' ? a.lng : a.lng ? parseFloat(a.lng) : undefined,
+          blurb: a.blurb || 'A worthwhile stop.',
+        })).sort((x: Activity, y: Activity) => TIME_ORDER.indexOf(x.time) - TIME_ORDER.indexOf(y.time)),
+      };
+
+      setTrip((prev) => prev ? { ...prev, days: [...prev.days, newDay] } : prev);
+    } catch {
+      setNote('Could not add another day — try again.');
+    }
+    setAddingDay(false);
+  }, [trip]);
+
   const reset = useCallback(() => {
     setScreen('form');
     setTrip(null);
@@ -244,5 +299,5 @@ export function useItinerary() {
     setNote('');
   }, []);
 
-  return { screen, trip, error, note, refining, generate, refine, swapActivity, moveActivity, reorderActivity, reset };
+  return { screen, trip, error, note, refining, addingDay, generate, refine, addDay, swapActivity, moveActivity, reorderActivity, reset };
 }
