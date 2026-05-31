@@ -27,15 +27,9 @@ export function Header({ onLogoClick }: HeaderProps) {
         </div>
       </button>
 
-      <nav className="hidden md:flex items-center gap-1 text-sm font-semibold text-ink-2">
-        <span className="px-3 py-2 rounded-full hover:bg-surface-2 hover:text-ink cursor-pointer transition">
+      <nav className="hidden md:flex items-center">
+        <button className="px-4 py-2 rounded-full border border-line-2 text-sm font-bold text-ink hover:border-accent hover:-translate-y-0.5 transition shadow-card-sm">
           How it works
-        </span>
-        <span className="px-3 py-2 rounded-full hover:bg-surface-2 hover:text-ink cursor-pointer transition">
-          Saved trips
-        </span>
-        <button className="ml-2 px-4 py-2 rounded-full border border-line-2 text-ink font-bold hover:border-accent hover:-translate-y-0.5 transition shadow-card-sm">
-          Sign in
         </button>
       </nav>
     </header>
