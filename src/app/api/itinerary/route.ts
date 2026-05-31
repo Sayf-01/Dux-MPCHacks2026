@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { anthropic } from '@/lib/ai/client';
+import { generateAIText } from '@/lib/ai/client';
 import { buildItineraryPrompt, SYSTEM_PROMPT } from '@/lib/ai/prompts';
 import { GenerateRequest } from '@/types/api';
 
@@ -18,15 +18,11 @@ function parseLoose(raw: string): Record<string, unknown> | null {
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as GenerateRequest;
-
-    const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: buildItineraryPrompt(body) }],
+    const raw = await generateAIText({
+      systemPrompt: SYSTEM_PROMPT,
+      userPrompt: buildItineraryPrompt(body),
     });
 
-    const raw = message.content[0].type === 'text' ? message.content[0].text : '';
     const json = parseLoose(raw);
 
     if (!json) {
