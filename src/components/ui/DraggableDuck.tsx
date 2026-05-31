@@ -13,7 +13,38 @@ export function DraggableDuck({ anchorRef }: Props) {
   const [ready, setReady] = useState(false);
   const [dragging, setDragging] = useState(false);
   const offsetRef = useRef({ x: 0, y: 0 });
+  const mouseDownPos = useRef({ x: 0, y: 0 });
   const duckRef = useRef<HTMLDivElement>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const audioBufferRef = useRef<AudioBuffer | null>(null);
+
+  useEffect(() => {
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    const ctx = new AudioCtx();
+    audioCtxRef.current = ctx;
+    fetch('/quack.mp3')
+      .then(r => r.arrayBuffer())
+      .then(buf => ctx.decodeAudioData(buf))
+      .then(decoded => { audioBufferRef.current = decoded; })
+      .catch(() => {});
+    return () => { ctx.close(); };
+  }, []);
+
+  const playQuack = () => {
+    const ctx = audioCtxRef.current;
+    const buffer = audioBufferRef.current;
+    if (!ctx || !buffer) return;
+    const play = () => {
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.value = 0.4;
+      src.connect(gain);
+      gain.connect(ctx.destination);
+      src.start(0);
+    };
+    ctx.state === 'suspended' ? ctx.resume().then(play) : play();
+  };
 
   useEffect(() => {
     if (!anchorRef.current) return;
@@ -31,6 +62,7 @@ export function DraggableDuck({ anchorRef }: Props) {
     if (!duckRef.current) return;
     const rect = duckRef.current.getBoundingClientRect();
     offsetRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    mouseDownPos.current = { x: e.clientX, y: e.clientY };
     setDragging(true);
     e.preventDefault();
   };
@@ -40,7 +72,13 @@ export function DraggableDuck({ anchorRef }: Props) {
     const onMove = (e: MouseEvent) => {
       setPos({ x: e.clientX - offsetRef.current.x, y: e.clientY - offsetRef.current.y });
     };
-    const onUp = () => setDragging(false);
+    const onUp = (e: MouseEvent) => {
+      const dx = e.clientX - mouseDownPos.current.x;
+      const dy = e.clientY - mouseDownPos.current.y;
+      // Treat as click if mouse barely moved
+      if (Math.sqrt(dx * dx + dy * dy) < 5) playQuack();
+      setDragging(false);
+    };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
     return () => {
