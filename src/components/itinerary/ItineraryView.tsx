@@ -22,6 +22,7 @@ interface ItineraryViewProps {
   swappingKey?: string | null;
   onReset: () => void;
   onSwap: (dayIdx: number, key: string) => void;
+  onDelete: (dayIdx: number, key: string) => void;
   onRefine: (instr: string) => void;
   onAddDay: () => void;
   onMoveActivity: (dayIdx: number, actKey: string, newTime: TimeSlot) => void;
@@ -29,7 +30,7 @@ interface ItineraryViewProps {
 }
 
 export function ItineraryView({
-  trip, req, refining, addingDay, note, swappingKey, onReset, onSwap, onRefine, onAddDay, onMoveActivity, onReorderActivity,
+  trip, req, refining, addingDay, note, swappingKey, onReset, onSwap, onDelete, onRefine, onAddDay, onMoveActivity, onReorderActivity,
 }: ItineraryViewProps) {
   const [activeDay, setActiveDay] = useState(0);
   const prevDayCount = useRef(trip.days.length);
@@ -174,6 +175,7 @@ export function ItineraryView({
                 currency={trip.currency}
                 swappingKey={swappingKey}
                 onSwap={(key) => onSwap(activeDay, key)}
+                onDelete={(key) => onDelete(activeDay, key)}
                 onMoveActivity={(actKey, newTime) => onMoveActivity(activeDay, actKey, newTime)}
                 onReorderActivity={(actKey, targetKey, position, newTime) => onReorderActivity(activeDay, actKey, targetKey, position, newTime)}
               />

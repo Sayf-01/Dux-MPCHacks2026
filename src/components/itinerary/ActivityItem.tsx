@@ -39,11 +39,12 @@ interface ActivityItemProps {
   isSwapping?: boolean;
   isDragging?: boolean;
   onSwap?: () => void;
+  onDelete?: () => void;
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: () => void;
 }
 
-export function ActivityItem({ activity, currency, isSwapping, isDragging, onSwap, onDragStart, onDragEnd }: ActivityItemProps) {
+export function ActivityItem({ activity, currency, isSwapping, isDragging, onSwap, onDelete, onDragStart, onDragEnd }: ActivityItemProps) {
   const badge = CAT_BADGE[activity.category] ?? CAT_BADGE.attraction;
 
   return (
@@ -111,21 +112,36 @@ export function ActivityItem({ activity, currency, isSwapping, isDragging, onSwa
         </div>
       </div>
 
-      {/* Swap button */}
-      {onSwap && (
-        <button
-          onClick={onSwap}
-          title="Swap activity"
-          className="w-10 h-10 rounded-full border border-line flex-shrink-0 flex items-center justify-center text-accent-ink hover:border-accent hover:bg-accent-soft hover:rotate-180 transition-[opacity,transform] duration-200 self-start opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
-        >
-          <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
-            <path
-              fillRule="evenodd"
-              d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
+      {/* Action buttons */}
+      {(onSwap || onDelete) && (
+        <div className="flex items-center gap-1.5 self-start flex-shrink-0 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200">
+          {onSwap && (
+            <button
+              onClick={onSwap}
+              title="Swap activity"
+              className="w-10 h-10 rounded-full border border-line flex items-center justify-center text-accent-ink hover:border-accent hover:bg-accent-soft hover:rotate-180 transition-[border-color,background-color,transform] duration-200"
+            >
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              title="Delete activity"
+              className="w-10 h-10 rounded-full border border-line flex items-center justify-center text-red-400 hover:border-red-400 hover:bg-red-50 transition-[border-color,background-color] duration-200"
+            >
+              <svg viewBox="0 0 20 20" width="15" height="15" fill="currentColor">
+                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

@@ -18,11 +18,12 @@ interface DayCardProps {
   currency: string;
   swappingKey?: string | null;
   onSwap?: (key: string) => void;
+  onDelete?: (key: string) => void;
   onMoveActivity?: (actKey: string, newTime: TimeSlot) => void;
   onReorderActivity?: (actKey: string, targetKey: string, position: 'before' | 'after', newTime: TimeSlot) => void;
 }
 
-export function DayCard({ day, currency, swappingKey, onSwap, onMoveActivity, onReorderActivity }: DayCardProps) {
+export function DayCard({ day, currency, swappingKey, onSwap, onDelete, onMoveActivity, onReorderActivity }: DayCardProps) {
   const bySlot = (slot: TimeSlot) => day.activities.filter((a) => a.time === slot);
   const dailyCost = estimateDailyCost(day.activities);
 
@@ -168,6 +169,7 @@ export function DayCard({ day, currency, swappingKey, onSwap, onMoveActivity, on
                         isSwapping={swappingKey === act._k}
                         isDragging={draggingKey === act._k}
                         onSwap={onSwap ? () => onSwap(act._k) : undefined}
+                        onDelete={onDelete ? () => onDelete(act._k) : undefined}
                         onDragStart={(e) => handleDragStart(e, act._k)}
                         onDragEnd={handleDragEnd}
                       />

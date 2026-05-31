@@ -292,6 +292,18 @@ export function useItinerary() {
     setAddingDay(false);
   }, [trip]);
 
+  const deleteActivity = useCallback((dayIdx: number, actKey: string) => {
+    setTrip(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        days: prev.days.map((day, i) =>
+          i !== dayIdx ? day : { ...day, activities: day.activities.filter(a => a._k !== actKey) }
+        ),
+      };
+    });
+  }, []);
+
   const reset = useCallback(() => {
     setScreen('form');
     setTrip(null);
@@ -299,5 +311,5 @@ export function useItinerary() {
     setNote('');
   }, []);
 
-  return { screen, trip, error, note, refining, addingDay, generate, refine, addDay, swapActivity, moveActivity, reorderActivity, reset };
+  return { screen, trip, error, note, refining, addingDay, generate, refine, addDay, swapActivity, deleteActivity, moveActivity, reorderActivity, reset };
 }
