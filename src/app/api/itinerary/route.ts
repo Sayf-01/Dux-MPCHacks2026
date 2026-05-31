@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateAIText } from '@/lib/ai/client';
-import { buildItineraryPrompt, SYSTEM_PROMPT, PlaceContext } from '@/lib/ai/prompts';
 import { GenerateRequest } from '@/types/api';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4000';
 
-const BUDGET_MAP: Record<string, string> = {
-  easy: 'Easy',
-  comfy: 'Comfy',
-  lavish: 'Lavish',
-};
+const PACE_TARGETS: Record<string, number> = { relaxed: 3, balanced: 4, packed: 6 };
+
+const BUDGET_MAP: Record<string, string> = { easy: 'Easy', comfy: 'Comfy', lavish: 'Lavish' };
 
 const INTEREST_TAG_MAP: Record<string, string> = {
   food: 'Food',
@@ -20,73 +16,110 @@ const INTEREST_TAG_MAP: Record<string, string> = {
   shopping: 'Shopping',
 };
 
-function parseLoose(raw: string): Record<string, unknown> | null {
-  const s = raw.trim().replace(/^```json/i, '').replace(/^```/, '').replace(/```$/, '');
-  const a = s.indexOf('{');
-  const b = s.lastIndexOf('}');
-  if (a < 0 || b < 0) return null;
-  try {
-    return JSON.parse(s.slice(a, b + 1));
-  } catch {
-    return null;
-  }
+const CAT_DUR: Record<string, string> = {
+  food: '1h 30m',
+  nature: '2h',
+  culture: '1h 30m',
+  nightlife: '2h',
+  shopping: '1h',
+};
+
+const DAY_THEMES: Record<string, string> = {
+  food: 'A Taste of Montréal',
+  nature: 'Into the Green',
+  culture: 'Arts & Heritage',
+  nightlife: 'After Dark',
+  shopping: 'Shop the City',
+};
+
+interface PlaceDoc {
+  name: string;
+  category: string;
+  hours: string;
+  price: string;
+  rating: number;
+  budgetLevel: string;
+  tags: string[];
+  coordinates: { lat: number; lng: number };
 }
 
-async function fetchScoredPlaces(req: GenerateRequest): Promise<PlaceContext[]> {
-  const budget = BUDGET_MAP[req.budget] || 'Comfy';
-  const tags = (req.interests || [])
-    .map((i) => INTEREST_TAG_MAP[i])
-    .filter(Boolean);
+function parseCost(price: string): number {
+  const nums = price.match(/\d+/g);
+  if (!nums) return 0;
+  if (nums.length === 1) return parseInt(nums[0]);
+  return Math.round((parseInt(nums[0]) + parseInt(nums[1])) / 2);
+}
 
-  const params = new URLSearchParams({ budget });
-  if (tags.length > 0) params.set('tags', tags.join(','));
+function assignTimes(count: number): string[] {
+  const slots = ['Morning', 'Afternoon', 'Evening'];
+  const times: string[] = [];
+  const perSlot = Math.ceil(count / 3);
+  for (const t of slots) {
+    for (let i = 0; i < perSlot && times.length < count; i++) times.push(t);
+  }
+  return times;
+}
 
-  const res = await fetch(`${BACKEND_URL}/places?${params.toString()}`, {
-    next: { revalidate: 300 },
+function getTheme(categories: string[]): string {
+  const counts: Record<string, number> = {};
+  for (const c of categories) counts[c] = (counts[c] || 0) + 1;
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'culture';
+  return DAY_THEMES[top] || 'Montréal Highlights';
+}
+
+function buildItinerary(places: PlaceDoc[], req: GenerateRequest) {
+  const target = PACE_TARGETS[req.pace] || 4;
+  const selected = places.slice(0, req.days * target);
+
+  const days = Array.from({ length: req.days }, (_, d) => {
+    const dayPlaces = selected.slice(d * target, (d + 1) * target);
+    const times = assignTimes(dayPlaces.length);
+    return {
+      day: d + 1,
+      theme: getTheme(dayPlaces.map((p) => p.category)),
+      area: 'Montréal',
+      weather: { icon: 'sun', temp: 21, label: 'Clear' },
+      activities: dayPlaces.map((p, i) => ({
+        name: p.name,
+        category: p.category,
+        time: times[i],
+        cost: parseCost(p.price),
+        dur: CAT_DUR[p.category] || '1h',
+        lat: p.coordinates.lat,
+        lng: p.coordinates.lng,
+        blurb: `Open ${p.hours}. Estimated ${p.price} per person.`,
+      })),
+    };
   });
 
-  if (!res.ok) return [];
+  return { destination: 'Montréal', country: 'Canada', currency: '$', days };
+}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const places: any[] = await res.json();
-  return places.map((p) => ({
-    name: p.name,
-    category: p.category,
-    hours: p.hours,
-    price: p.price,
-    rating: p.rating,
-    lat: p.coordinates.lat,
-    lng: p.coordinates.lng,
-    budgetLevel: p.budgetLevel,
-    tags: p.tags,
-  }));
+async function fetchScoredPlaces(req: GenerateRequest): Promise<PlaceDoc[]> {
+  const budget = BUDGET_MAP[req.budget] || 'Comfy';
+  const tags = (req.interests || []).map((i) => INTEREST_TAG_MAP[i]).filter(Boolean);
+
+  const params = new URLSearchParams({ budget });
+  if (tags.length > 0) params.set('tags', [...new Set(tags)].join(','));
+
+  const res = await fetch(`${BACKEND_URL}/places?${params.toString()}`);
+  if (!res.ok) throw new Error(`Backend responded ${res.status}`);
+  return res.json();
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as GenerateRequest;
+    const places = await fetchScoredPlaces(body);
 
-    let places: PlaceContext[] = [];
-    try {
-      places = await fetchScoredPlaces(body);
-    } catch {
-      // backend unavailable — fall back to AI-only mode
+    if (places.length === 0) {
+      return NextResponse.json({ error: 'No places found for your preferences' }, { status: 404 });
     }
 
-    const raw = await generateAIText({
-      systemPrompt: SYSTEM_PROMPT,
-      userPrompt: buildItineraryPrompt(body, places.length > 0 ? places : undefined),
-    });
-
-    const json = parseLoose(raw);
-
-    if (!json) {
-      return NextResponse.json({ error: 'Failed to parse itinerary response' }, { status: 500 });
-    }
-
-    return NextResponse.json({ trip: json });
+    const trip = buildItinerary(places, body);
+    return NextResponse.json({ trip });
   } catch (err) {
     console.error('[itinerary] error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Could not connect to the database. Make sure the backend is running.' }, { status: 503 });
   }
 }
