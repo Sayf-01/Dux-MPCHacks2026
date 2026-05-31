@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { PlannerFormData } from '@/types/planner';
 
 const defaults: PlannerFormData = {
-  destination: 'Montréal',
+  destination: 'montreal',
   days: 3,
   people: 2,
   budget: 'comfy',
