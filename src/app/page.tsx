@@ -150,14 +150,7 @@ export default function Home() {
 
   const handleRefine = (instr: string) => {
     if (!trip) return;
-    refine(instr, {
-      destination: form.destination,
-      days: trip.days.length,
-      people: trip.people,
-      budget: trip.budget,
-      pace: trip.pace,
-      interests: form.interests,
-    });
+    refine(instr, form.destination, trip);
   };
 
   if (screen === 'generating') {

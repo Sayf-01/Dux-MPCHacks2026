@@ -100,23 +100,30 @@ export function useItinerary() {
 
   const refine = useCallback(async (
     instr: string,
-    req: { destination: string; days: number; people: number; budget: string; pace: string; interests: string[] }
+    city: string,
+    currentTrip: TripItinerary
   ) => {
     setRefining(true);
     setNote('');
     try {
-      const res = await fetch('/api/itinerary', {
+      const res = await fetch('/api/refine', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...req, refinement: instr }),
+        body: JSON.stringify({ itinerary: currentTrip, instruction: instr, city }),
       });
       if (!res.ok) throw new Error('API error');
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      setTrip(normalizeTrip(data.trip, req));
-      setNote(`Reworked around: "${instr}".`);
+      setTrip(normalizeTrip(data.trip, {
+        destination: currentTrip.destination,
+        days: currentTrip.days.length,
+        people: currentTrip.people,
+        budget: currentTrip.budget,
+        pace: currentTrip.pace,
+      }));
+      setNote(`DUXy reworked your trip: "${instr}"`);
     } catch {
-      setNote('Could not refine right now — try again.');
+      setNote('DUXy could not refine right now — try again.');
     }
     setRefining(false);
   }, []);
