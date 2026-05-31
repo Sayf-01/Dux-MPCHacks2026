@@ -16,7 +16,7 @@ export function TripSummary({ trip }: TripSummaryProps) {
   ];
 
   return (
-    <div className="flex flex-wrap gap-2 mt-2">
+    <div className="flex flex-nowrap gap-2">
       {chips.map((chip) => (
         <span
           key={chip.label}

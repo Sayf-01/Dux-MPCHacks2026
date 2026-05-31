@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Newsreader, Hanken_Grotesk } from 'next/font/google';
 import './globals.css';
+import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
 
 const newsreader = Newsreader({
   subsets: ['latin'],
@@ -26,7 +27,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${newsreader.variable} ${hanken.variable}`}>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <AnimatedBackground />
+        {children}
+      </body>
     </html>
   );
 }

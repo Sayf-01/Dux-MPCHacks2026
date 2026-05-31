@@ -29,6 +29,7 @@ export function ItineraryView({
 }: ItineraryViewProps) {
   const [activeDay, setActiveDay] = useState(0);
   const [refineText, setRefineText] = useState('');
+  const [summaryOpen, setSummaryOpen] = useState(false);
   const day = trip.days[activeDay];
 
   const handleRefine = (instr: string) => {
@@ -38,10 +39,10 @@ export function ItineraryView({
   };
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen relative">
       {/* Sticky topbar */}
       <div className="sticky top-0 z-20 bg-gradient-to-b from-cream via-cream/95 to-transparent pb-3">
-        <div className="max-w-[1180px] mx-auto px-6 md:px-8 pt-4 flex flex-wrap items-start gap-4">
+        <div className="max-w-[1180px] mx-auto px-6 md:px-8 pt-4 flex items-center gap-3 flex-wrap">
           <button
             onClick={onReset}
             className="flex-shrink-0 flex items-center gap-2 text-sm font-extrabold text-ink bg-surface border border-line-2 px-4 py-2.5 rounded-full hover:border-accent hover:-translate-y-0.5 transition shadow-card-sm"
@@ -52,28 +53,56 @@ export function ItineraryView({
             New trip
           </button>
 
-          <div className="flex-1 min-w-0">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-ink flex flex-wrap items-center gap-2 leading-tight">
-              {trip.destination}
-              {trip.country && (
-                <span className="relative -top-px text-xs font-extrabold uppercase tracking-wider bg-accent text-white px-3 py-1 rounded-full leading-none">
-                  {trip.country}
-                </span>
-              )}
-            </h2>
-          </div>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-ink leading-none flex-shrink-0">
+            {trip.destination}
+          </h2>
 
-          <div className="flex-shrink-0 hidden md:block">
+          {trip.country && (
+            <span className="flex-shrink-0 text-xs font-extrabold uppercase tracking-wider bg-accent text-white px-3 py-1 rounded-full leading-none">
+              {trip.country}
+            </span>
+          )}
+
+          <div className="flex-1" />
+
+          <div className="flex-shrink-0">
             <ExportButton trip={trip} />
-          </div>
-
-          <div className="w-full">
-            <TripSummary trip={trip} />
           </div>
         </div>
       </div>
 
-      <div className="max-w-[1180px] mx-auto px-6 md:px-8 mt-1">
+      <div className="relative z-[1] max-w-[1180px] mx-auto px-6 md:px-8 mt-1">
+        {/* Summary toggle */}
+        <div className="flex items-center gap-3 h-10 mb-2">
+          <button
+            onClick={() => setSummaryOpen((o) => !o)}
+            className="flex-shrink-0 flex items-center gap-2 text-sm font-extrabold text-ink bg-surface border border-line-2 px-4 py-2.5 rounded-full hover:border-accent hover:-translate-y-0.5 transition shadow-card-sm"
+          >
+            Summary
+            <svg
+              viewBox="0 0 16 16"
+              width="11"
+              height="11"
+              fill="currentColor"
+              className={`transition-all duration-200 -rotate-90 ${summaryOpen ? 'opacity-0 w-0 ml-0' : 'opacity-100'}`}
+            >
+              <path fillRule="evenodd" d="M8 10.293L2.354 4.646a.5.5 0 10-.708.708l6 6a.5.5 0 00.708 0l6-6a.5.5 0 00-.708-.708L8 10.293z" clipRule="evenodd" />
+            </svg>
+          </button>
+          <div
+            className="flex items-center gap-2 overflow-hidden flex-nowrap"
+            style={{
+              maxWidth: summaryOpen ? 600 : 0,
+              opacity: summaryOpen ? 1 : 0,
+              transition: summaryOpen
+                ? 'max-width 220ms cubic-bezier(0.4, 0, 0.2, 1), opacity 80ms ease-in 150ms'
+                : 'opacity 80ms ease-out, max-width 180ms cubic-bezier(0.4, 0, 0.2, 1) 60ms',
+            }}
+          >
+            <TripSummary trip={trip} />
+          </div>
+        </div>
+
         {/* Day tabs */}
         <div className="flex gap-3 overflow-x-auto pt-1 pb-8 scrollbar-none">
           {trip.days.map((d, i) => (

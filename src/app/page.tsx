@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { PlannerForm } from '@/components/planner/PlannerForm';
 import { ItineraryView } from '@/components/itinerary/ItineraryView';
 import { DraggableDuck } from '@/components/ui/DraggableDuck';
+import { AnimatedBackground } from '@/components/ui/AnimatedBackground';
 import { usePlannerForm } from '@/hooks/usePlannerForm';
 import { useItinerary } from '@/hooks/useItinerary';
 
@@ -41,8 +42,8 @@ function GeneratingScreen({
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-10 bg-cream">
-      <div className="text-center max-w-sm w-full">
+    <div className="min-h-screen flex items-center justify-center p-10 relative">
+      <div className="relative z-[1] text-center max-w-sm w-full">
         {/* Animated logo */}
         <div className="relative w-36 h-36 mx-auto mb-8 flex items-center justify-center">
           <div className="absolute inset-0 rounded-full border-2 border-line opacity-50" />
@@ -191,8 +192,8 @@ export default function Home() {
 
   /* Form screen */
   return (
-    <div className="min-h-screen bg-cream">
-      <div className="max-w-[1180px] mx-auto px-6 md:px-8">
+    <div className="min-h-screen relative">
+      <div className="relative z-[1] max-w-[1180px] mx-auto px-6 md:px-8" >
         <Header onLogoClick={reset} />
 
         {error && (
