@@ -29,7 +29,7 @@ export function DayCard({ day, currency, swappingKey, onSwap }: DayCardProps) {
 
   return (
     <div>
-      <div className="flex flex-wrap items-end justify-between gap-4 pb-5 mb-1 border-b-2 border-dashed border-line">
+      <div className="flex flex-wrap items-end justify-between gap-4 pb-5 mb-1">
         <div>
           <p className="text-xs font-extrabold uppercase tracking-wider text-accent-ink mb-1">
             Day {day.day} · {day.area}
@@ -63,10 +63,6 @@ export function DayCard({ day, currency, swappingKey, onSwap }: DayCardProps) {
                 <span className="text-xs font-extrabold uppercase tracking-[0.12em] text-ink">
                   {slot}
                 </span>
-                <div
-                  className="flex-1 h-px"
-                  style={{ background: 'repeating-linear-gradient(90deg,#E5D9CF 0 8px,transparent 8px 16px)' }}
-                />
               </div>
               <div className="flex flex-col gap-3">
                 {acts.map((act) => (

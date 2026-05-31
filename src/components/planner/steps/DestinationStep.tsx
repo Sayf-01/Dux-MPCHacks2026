@@ -1,8 +1,9 @@
 'use client';
+import Image from 'next/image';
 
 const CITIES = [
-  { id: 'montreal', label: 'Montréal', sub: 'QC, Canada', flag: '🍁' },
-  { id: 'toronto', label: 'Toronto', sub: 'ON, Canada', flag: '🏙️' },
+  { id: 'montreal', label: 'Montréal', sub: 'QC, Canada', flag: null, img: '/maple-leaf.png' },
+  { id: 'toronto', label: 'Toronto', sub: 'ON, Canada', flag: null, img: '/toronto-skyline.png' },
 ];
 
 interface DestinationStepProps {
@@ -33,7 +34,10 @@ export function DestinationStep({ value, onChange }: DestinationStepProps) {
                   : 'border-line bg-surface-2 text-ink-2 hover:border-accent/40 hover:text-ink'
               }`}
             >
-              <span className="text-xl">{city.flag}</span>
+              {city.img
+                ? <Image src={city.img} alt="" width={44} height={44} className={active ? 'brightness-0 invert' : 'brightness-0'} unoptimized />
+                : <span className="text-xl">{city.flag}</span>
+              }
               <div className="flex flex-col">
                 <span className="text-sm font-extrabold leading-none">{city.label}</span>
                 <span className={`text-xs font-semibold mt-0.5 ${active ? 'text-white/80' : 'opacity-60'}`}>{city.sub}</span>

@@ -15,35 +15,21 @@ export function DraggableDuck({ anchorRef }: Props) {
   const offsetRef = useRef({ x: 0, y: 0 });
   const mouseDownPos = useRef({ x: 0, y: 0 });
   const duckRef = useRef<HTMLDivElement>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const audioBufferRef = useRef<AudioBuffer | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const ctx = new AudioCtx();
-    audioCtxRef.current = ctx;
-    fetch('/quack.mp3')
-      .then(r => r.arrayBuffer())
-      .then(buf => ctx.decodeAudioData(buf))
-      .then(decoded => { audioBufferRef.current = decoded; })
-      .catch(() => {});
-    return () => { ctx.close(); };
+    const audio = new Audio('/quack.mp3');
+    audio.volume = 0.4;
+    audio.preload = 'auto';
+    audio.load();
+    audioRef.current = audio;
   }, []);
 
   const playQuack = () => {
-    const ctx = audioCtxRef.current;
-    const buffer = audioBufferRef.current;
-    if (!ctx || !buffer) return;
-    const play = () => {
-      const src = ctx.createBufferSource();
-      src.buffer = buffer;
-      const gain = ctx.createGain();
-      gain.gain.value = 0.4;
-      src.connect(gain);
-      gain.connect(ctx.destination);
-      src.start(0);
-    };
-    ctx.state === 'suspended' ? ctx.resume().then(play) : play();
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
   };
 
   useEffect(() => {

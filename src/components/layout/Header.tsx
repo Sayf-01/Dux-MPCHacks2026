@@ -12,12 +12,11 @@ export function Header({ onLogoClick }: HeaderProps) {
         className="flex items-center gap-3 cursor-pointer group"
       >
         <div className="w-11 h-11 bg-accent rounded-xl flex items-center justify-center text-white shadow-btn flex-shrink-0">
-          <svg viewBox="0 0 32 32" width="22" height="22" fill="currentColor">
-            <ellipse cx="19" cy="20" rx="11" ry="8" />
-            <circle cx="11" cy="11" r="6" />
-            <rect x="2" y="10" width="9" height="4" rx="2" />
-            <path d="M27 17 L32 12 L29 20 Z" />
-            <circle cx="9" cy="10" r="1.5" fill="#F5EFE6" />
+          <svg viewBox="0 0 32 32" width="26" height="26" fill="currentColor">
+            <ellipse cx="14" cy="22" rx="13" ry="9" />
+            <circle cx="20" cy="10" r="7" />
+            <path d="M25 9.5 L30 11.5 L25 13.5 Z" />
+            <circle cx="22" cy="8" r="1.5" fill="#F5EFE6" />
           </svg>
         </div>
         <div className="flex items-center gap-2">

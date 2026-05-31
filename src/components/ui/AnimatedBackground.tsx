@@ -34,33 +34,28 @@ function makeNode(w: number, h: number): Node {
 function drawDuckSilhouette(ctx: CanvasRenderingContext2D, fillColor: string, eyeColor: string) {
   ctx.fillStyle = fillColor;
 
-  // Body
+  // Body: large round oval
   ctx.beginPath();
-  ctx.ellipse(19, 20, 11, 8, 0, 0, Math.PI * 2);
+  ctx.ellipse(14, 22, 13, 9, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Head
+  // Head: round circle
   ctx.beginPath();
-  ctx.arc(11, 11, 6, 0, Math.PI * 2);
+  ctx.arc(20, 10, 7, 0, Math.PI * 2);
   ctx.fill();
 
-  // Beak
+  // Beak: small triangle pointing right
   ctx.beginPath();
-  ctx.roundRect(2, 10, 9, 4, 2);
-  ctx.fill();
-
-  // Tail
-  ctx.beginPath();
-  ctx.moveTo(27, 17);
-  ctx.lineTo(32, 12);
-  ctx.lineTo(29, 20);
+  ctx.moveTo(25, 9.5);
+  ctx.lineTo(30, 11.5);
+  ctx.lineTo(25, 13.5);
   ctx.closePath();
   ctx.fill();
 
   // Eye
   ctx.fillStyle = eyeColor;
   ctx.beginPath();
-  ctx.arc(9, 10, 1.5, 0, Math.PI * 2);
+  ctx.arc(22, 8, 1.5, 0, Math.PI * 2);
   ctx.fill();
 }
 

@@ -45,7 +45,7 @@ export function ActivityItem({ activity, currency, isSwapping, onSwap }: Activit
 
   return (
     <div
-      className={`flex items-start gap-4 bg-surface border border-line rounded-2xl p-4 transition-all duration-200 hover:border-accent hover:-translate-y-0.5 hover:shadow-card ${
+      className={`group flex items-start gap-4 bg-surface border border-line rounded-2xl p-4 transition-all duration-200 hover:border-accent hover:-translate-y-0.5 hover:shadow-card ${
         isSwapping ? 'opacity-0 translate-y-2 scale-95' : 'opacity-100'
       }`}
     >
@@ -108,7 +108,7 @@ export function ActivityItem({ activity, currency, isSwapping, onSwap }: Activit
         <button
           onClick={onSwap}
           title="Swap activity"
-          className="w-10 h-10 rounded-full border border-line flex-shrink-0 flex items-center justify-center text-accent-ink hover:border-accent hover:bg-accent-soft hover:rotate-180 transition-all duration-300 self-start"
+          className="w-10 h-10 rounded-full border border-line flex-shrink-0 flex items-center justify-center text-accent-ink hover:border-accent hover:bg-accent-soft hover:rotate-180 transition-[opacity,transform] duration-200 self-start opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
         >
           <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
             <path

@@ -1,4 +1,5 @@
 'use client';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { PACES } from '@/constants/pace';
 
 interface PaceStepProps {
@@ -21,39 +22,55 @@ function LightningBolt() {
   );
 }
 
+const BOLT_COUNT: Record<string, number> = { relaxed: 1, balanced: 2, packed: 3 };
+
 export function PaceStep({ value, onChange }: PaceStepProps) {
-  const paceLabel = (paceId: string, label: string) => {
-    const boltCount = paceId === 'relaxed' ? 1 : paceId === 'balanced' ? 2 : 3;
-    const selected = value === paceId;
-    return (
-      <span className="inline-flex items-center gap-1">
-        <span className={`inline-flex items-center -space-x-1 leading-none ${selected ? 'text-accent' : 'text-ink-3'}`}>
-          {Array.from({ length: boltCount }).map((_, index) => (
-            <LightningBolt key={index} />
-          ))}
-        </span>
-        <span>{label}</span>
-      </span>
-    );
-  };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [pill, setPill] = useState<{ left: number; width: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const idx = PACES.findIndex(p => p.id === value);
+    const btn = btnRefs.current[idx];
+    const container = containerRef.current;
+    if (!btn || !container) return;
+    const cRect = container.getBoundingClientRect();
+    const bRect = btn.getBoundingClientRect();
+    setPill({ left: bRect.left - cRect.left, width: bRect.width });
+  }, [value]);
 
   return (
     <div className="flex flex-col gap-2">
       <label className="text-sm font-extrabold text-ink">Pace</label>
-      <div className="flex bg-surface-2 border border-line rounded-2xl p-1 gap-1">
-        {PACES.map((p) => (
-          <button
-            key={p.id}
-            onClick={() => onChange(p.id)}
-            className={`flex-1 h-12 rounded-xl text-sm font-extrabold flex items-center justify-center transition ${
-              value === p.id
-                ? 'bg-surface text-ink shadow-card-sm'
-                : 'text-ink-2 hover:text-ink'
-            }`}
-          >
-            {paceLabel(p.id, p.label)}
-          </button>
-        ))}
+      <div ref={containerRef} className="relative flex bg-surface-2 border border-line rounded-2xl p-1 gap-1">
+
+        {/* Sliding pill — only this moves */}
+        {pill && (
+          <div
+            className="absolute top-1 bottom-1 bg-surface rounded-xl shadow-card-sm"
+            style={{
+              left: pill.left,
+              width: pill.width,
+              transition: 'left 500ms cubic-bezier(0.4, 0, 0.2, 1)',
+            }}
+          />
+        )}
+
+        {PACES.map((p, i) => {
+          const selected = value === p.id;
+          return (
+            <button
+              key={p.id}
+              ref={el => { btnRefs.current[i] = el; }}
+              onClick={() => onChange(p.id)}
+              className={`relative z-10 flex-1 h-12 rounded-xl text-sm font-extrabold flex items-center justify-center transition-colors ${
+                selected ? 'text-ink' : 'text-ink-2 hover:text-ink'
+              }`}
+            >
+              {p.label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

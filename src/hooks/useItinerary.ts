@@ -121,6 +121,57 @@ export function useItinerary() {
     setRefining(false);
   }, []);
 
+  const swapActivity = useCallback(async (
+    dayIdx: number,
+    actKey: string,
+    activity: Activity,
+  ) => {
+    if (!trip) return;
+    try {
+      const res = await fetch('/api/swap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          destination: trip.destination,
+          category: activity.category,
+          excludeNames: trip.days[dayIdx]?.activities.map(a => a.name) ?? [activity.name],
+          budget: trip.budget,
+          currentTime: activity.time,
+        }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.error) return;
+
+      const newAct: Activity = {
+        _k: `swap-${Math.random().toString(36).slice(2)}`,
+        name: data.activity.name,
+        category: activity.category,
+        time: activity.time,
+        cost: typeof data.activity.cost === 'number' ? data.activity.cost : Math.max(0, parseInt(data.activity.cost) || 0),
+        dur: data.activity.dur || '1h',
+        lat: data.activity.lat,
+        lng: data.activity.lng,
+        blurb: data.activity.blurb || 'A worthwhile stop.',
+      };
+
+      setTrip(prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          days: prev.days.map((day, i) =>
+            i !== dayIdx ? day : {
+              ...day,
+              activities: day.activities.map(a => a._k === actKey ? newAct : a),
+            }
+          ),
+        };
+      });
+    } catch {
+      // silently fail — swap is best-effort
+    }
+  }, [trip]);
+
   const reset = useCallback(() => {
     setScreen('form');
     setTrip(null);
@@ -128,5 +179,5 @@ export function useItinerary() {
     setNote('');
   }, []);
 
-  return { screen, trip, error, note, refining, generate, refine, reset };
+  return { screen, trip, error, note, refining, generate, refine, swapActivity, reset };
 }

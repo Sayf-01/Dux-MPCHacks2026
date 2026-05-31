@@ -50,12 +50,11 @@ function GeneratingScreen({
           <div className="absolute inset-5 rounded-full border border-accent/20" />
           {/* Center */}
           <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center text-white shadow-btn z-10">
-            <svg viewBox="0 0 32 32" width="26" height="26" fill="currentColor">
-              <ellipse cx="19" cy="20" rx="11" ry="8" />
-              <circle cx="11" cy="11" r="6" />
-              <rect x="2" y="10" width="9" height="4" rx="2" />
-              <path d="M27 17 L32 12 L29 20 Z" />
-              <circle cx="9" cy="10" r="1.5" fill="#F5EFE6" />
+            <svg viewBox="0 0 32 32" width="34" height="34" fill="currentColor">
+              <ellipse cx="14" cy="22" rx="13" ry="9" />
+              <circle cx="20" cy="10" r="7" />
+              <path d="M25 9.5 L30 11.5 L25 13.5 Z" />
+              <circle cx="22" cy="8" r="1.5" fill="#F5EFE6" />
             </svg>
           </div>
           {/* Orbiting dots */}
@@ -122,7 +121,7 @@ function GeneratingScreen({
 
 export default function Home() {
   const { form, update, toggleInterest, isValid } = usePlannerForm();
-  const { screen, trip, error, note, refining, generate, refine, reset } = useItinerary();
+  const { screen, trip, error, note, refining, generate, refine, swapActivity, reset } = useItinerary();
   const [swappingKey, setSwappingKey] = useState<string | null>(null);
   const formCardRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
@@ -140,9 +139,13 @@ export default function Home() {
     });
   };
 
-  const handleSwap = (dayIdx: number, key: string) => {
+  const handleSwap = async (dayIdx: number, key: string) => {
+    if (!trip) return;
+    const activity = trip.days[dayIdx]?.activities.find(a => a._k === key);
+    if (!activity) return;
     setSwappingKey(key);
-    setTimeout(() => setSwappingKey(null), 400);
+    await swapActivity(dayIdx, key, activity);
+    setTimeout(() => setSwappingKey(null), 350);
   };
 
   const handleRefine = (instr: string) => {
@@ -211,8 +214,8 @@ export default function Home() {
             </div>
 
             <h1 className="font-display text-5xl md:text-6xl lg:text-[68px] font-semibold text-ink leading-[1.02] tracking-tight mb-5">
-              Plan the trip,{' '}
-              <em ref={logisticsRef} className="not-italic text-accent italic">not the logistics.</em>
+              Less <span ref={logisticsRef}>planning.</span>{' '}
+              <em className="not-italic text-accent italic">More memories.</em>
             </h1>
 
             <p className="text-lg md:text-xl text-ink-2 leading-relaxed mb-8 font-medium max-w-[440px]">
