@@ -1,5 +1,26 @@
 'use client';
+import Image from 'next/image';
 import { Activity, ActivityCategory } from '@/types/itinerary';
+
+const CAT_ICON: Record<string, string> = {
+  attraction: '/icons/Attraction.png',
+  food:       '/icons/Food.png',
+  nature:     '/icons/Nature.png',
+  art:        '/icons/Art.png',
+  culture:    '/icons/Attraction.png',
+  nightlife:  '/icons/Nightlife.png',
+  views:      '/icons/Views.png',
+  shopping:   '/icons/Shopping.png',
+};
+
+const CAT_SIZE: Record<string, number> = {
+  food:       66,
+  attraction: 54,
+  culture:    54,
+  nature:     44,
+  nightlife:  52,
+  shopping:   42,
+};
 
 const CAT_BADGE: Record<ActivityCategory, { label: string; cls: string }> = {
   attraction: { label: 'Attraction', cls: 'bg-amber-100 text-amber-800' },
@@ -24,10 +45,29 @@ export function ActivityItem({ activity, currency, isSwapping, onSwap }: Activit
 
   return (
     <div
-      className={`flex items-center gap-4 bg-surface border border-line rounded-2xl p-4 transition-all duration-200 hover:border-accent hover:-translate-y-0.5 hover:shadow-card ${
+      className={`flex items-start gap-4 bg-surface border border-line rounded-2xl p-4 transition-all duration-200 hover:border-accent hover:-translate-y-0.5 hover:shadow-card ${
         isSwapping ? 'opacity-0 translate-y-2 scale-95' : 'opacity-100'
       }`}
     >
+      {/* Category icon */}
+      {CAT_ICON[(activity.category as string).toLowerCase()] && (
+        <div className="flex-shrink-0 self-stretch flex items-center justify-center w-[70px]">
+          {(() => {
+            const cat = (activity.category as string).toLowerCase();
+            const size = CAT_SIZE[cat] ?? 36;
+            return (
+              <Image
+                src={CAT_ICON[cat]}
+                alt={badge.label}
+                width={size}
+                height={size}
+                unoptimized
+              />
+            );
+          })()}
+        </div>
+      )}
+
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap mb-1">

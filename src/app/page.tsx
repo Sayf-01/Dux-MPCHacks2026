@@ -223,7 +223,7 @@ export default function Home() {
                 <span className="text-accent text-base">✦</span> Adapts to your constraints
               </span>
               <span className="flex items-center gap-2 bg-surface border border-line px-4 py-2.5 rounded-full shadow-card-sm">
-                <span className="text-accent text-base">◎</span> Ready in seconds
+                <span className="text-accent text-base">●</span> Ready in seconds
               </span>
             </div>
           </div>

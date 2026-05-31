@@ -29,14 +29,14 @@ export function DestinationStep({ value, onChange }: DestinationStepProps) {
               onClick={() => onChange(city.id)}
               className={`flex items-center gap-3 h-14 px-4 rounded-2xl border-2 transition font-bold text-left ${
                 active
-                  ? 'border-accent bg-accent-soft text-accent'
+                  ? 'border-accent bg-accent text-white'
                   : 'border-line bg-surface-2 text-ink-2 hover:border-accent/40 hover:text-ink'
               }`}
             >
               <span className="text-xl">{city.flag}</span>
               <div className="flex flex-col">
                 <span className="text-sm font-extrabold leading-none">{city.label}</span>
-                <span className="text-xs font-semibold opacity-60 mt-0.5">{city.sub}</span>
+                <span className={`text-xs font-semibold mt-0.5 ${active ? 'text-white/80' : 'opacity-60'}`}>{city.sub}</span>
               </div>
               {active && (
                 <span className="ml-auto">
