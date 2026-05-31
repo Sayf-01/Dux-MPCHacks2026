@@ -2,25 +2,14 @@
 import { Activity, ActivityCategory } from '@/types/itinerary';
 
 const CAT_BADGE: Record<ActivityCategory, { label: string; cls: string }> = {
-  attraction: { label: 'Sight',     cls: 'bg-amber-100 text-amber-800' },
+  attraction: { label: 'Attraction', cls: 'bg-amber-100 text-amber-800' },
   food:       { label: 'Food',      cls: 'bg-orange-100 text-orange-800' },
   nature:     { label: 'Nature',    cls: 'bg-green-100 text-green-800' },
   art:        { label: 'Art',       cls: 'bg-purple-100 text-purple-800' },
   nightlife:  { label: 'Nightlife', cls: 'bg-blue-100 text-blue-800' },
   views:      { label: 'Views',     cls: 'bg-sky-100 text-sky-800' },
-  shopping:   { label: 'Shop',      cls: 'bg-pink-100 text-pink-800' },
-  hidden:     { label: 'Hidden',    cls: 'bg-teal-100 text-teal-800' },
-};
-
-const CAT_THUMB_BG: Record<ActivityCategory, string> = {
-  attraction: 'bg-amber-50',
-  food:       'bg-orange-50',
-  nature:     'bg-green-50',
-  art:        'bg-purple-50',
-  nightlife:  'bg-blue-50',
-  views:      'bg-sky-50',
-  shopping:   'bg-pink-50',
-  hidden:     'bg-teal-50',
+  shopping:   { label: 'Shopping',  cls: 'bg-pink-100 text-pink-800' },
+  hidden:     { label: 'Hidden Gems', cls: 'bg-teal-100 text-teal-800' },
 };
 
 interface ActivityItemProps {
@@ -39,18 +28,6 @@ export function ActivityItem({ activity, currency, isSwapping, onSwap }: Activit
         isSwapping ? 'opacity-0 translate-y-2 scale-95' : 'opacity-100'
       }`}
     >
-      {/* Thumbnail placeholder */}
-      <div
-        className={`w-[88px] h-[88px] rounded-xl flex-shrink-0 ${CAT_THUMB_BG[activity.category]} flex flex-col items-center justify-center text-center p-2 gap-1`}
-      >
-        <span className="text-[10px] font-extrabold uppercase tracking-wider text-ink-3 opacity-50">
-          Photo
-        </span>
-        <span className="text-[11px] font-semibold text-ink-2 leading-tight line-clamp-3">
-          {activity.name}
-        </span>
-      </div>
-
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap mb-1">
