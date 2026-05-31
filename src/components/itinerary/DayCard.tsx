@@ -10,11 +10,6 @@ const TIME_ICONS: Record<TimeSlot, string> = {
   Evening: '🌙',
 };
 
-const WEATHER_ICONS: Record<string, string> = {
-  sun: '☀️',
-  cloud: '☁️',
-  rain: '🌧',
-};
 
 const TIME_SLOTS: TimeSlot[] = ['Morning', 'Afternoon', 'Evening'];
 
@@ -127,9 +122,6 @@ export function DayCard({ day, currency, swappingKey, onSwap, onMoveActivity, on
           </h2>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="flex items-center gap-1.5 text-sm font-bold text-ink-2 bg-surface border border-line px-3 py-2 rounded-full">
-            {WEATHER_ICONS[day.weather.icon]} {day.weather.temp}° · {day.weather.label}
-          </span>
           {dailyCost > 0 && (
             <span className="flex items-center gap-1.5 text-sm font-bold text-ink-2 bg-surface border border-line px-3 py-2 rounded-full">
               💳 {currency}{dailyCost} / day

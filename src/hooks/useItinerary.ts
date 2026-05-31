@@ -20,6 +20,7 @@ function normCat(s: string): Activity['category'] {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizeTrip(raw: any, req: { destination: string; days: number; people: number; budget: string; pace: string }): TripItinerary {
+  const seenNames = new Set<string>();
   return {
     destination: raw.destination || req.destination,
     country: raw.country || '',
@@ -48,6 +49,12 @@ function normalizeTrip(raw: any, req: { destination: string; days: number; peopl
           lng: typeof a.lng === 'number' ? a.lng : a.lng ? parseFloat(a.lng) : undefined,
           blurb: a.blurb || 'A worthwhile stop.',
         }))
+        .filter((a) => {
+          const key = a.name.toLowerCase().trim();
+          if (seenNames.has(key)) return false;
+          seenNames.add(key);
+          return true;
+        })
         .sort((x, y) => TIME_ORDER.indexOf(x.time) - TIME_ORDER.indexOf(y.time)),
     })),
   };

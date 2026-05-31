@@ -37,7 +37,7 @@ export function buildItineraryPrompt(req: GenerateRequest, places?: PlaceContext
       )
       .join('\n');
 
-    prompt += ` IMPORTANT: You MUST select activities ONLY from this curated ${destinationLabel} place list. Do NOT invent any other places. Use the exact name, lat, and lng values provided.\n\nAvailable places:\n${list}\n`;
+    prompt += ` IMPORTANT: You MUST select activities ONLY from this curated ${destinationLabel} place list. Do NOT invent any other places. Use the exact name, lat, and lng values provided. Each place must appear AT MOST ONCE across the entire itinerary — never repeat the same place on different days.\n\nAvailable places:\n${list}\n`;
   }
 
   prompt += ` Return exactly ${req.days} days. Schema: ${schema}`;

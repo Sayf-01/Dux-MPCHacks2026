@@ -42,7 +42,7 @@ export function PlannerForm({ form, onUpdate, onToggleInterest, onSubmit, isVali
       <InterestsStep selected={form.interests} onToggle={onToggleInterest} />
 
       <button
-        onClick={onSubmit}
+        onClick={() => { new Audio('/quack.mp3').play(); onSubmit(); }}
         disabled={!isValid}
         className="mt-1 h-16 rounded-full bg-accent text-white text-lg font-extrabold flex items-center justify-center gap-3 shadow-btn hover:-translate-y-0.5 hover:shadow-btn-hover active:translate-y-1 active:shadow-none transition disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-btn"
       >
