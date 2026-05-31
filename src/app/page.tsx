@@ -1,8 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { PlannerForm } from '@/components/planner/PlannerForm';
 import { ItineraryView } from '@/components/itinerary/ItineraryView';
+import { DraggableDuck } from '@/components/ui/DraggableDuck';
 import { usePlannerForm } from '@/hooks/usePlannerForm';
 import { useItinerary } from '@/hooks/useItinerary';
 
@@ -122,6 +123,8 @@ export default function Home() {
   const { form, update, toggleInterest, isValid } = usePlannerForm();
   const { screen, trip, error, note, refining, generate, refine, reset } = useItinerary();
   const [swappingKey, setSwappingKey] = useState<string | null>(null);
+  const formCardRef = useRef<HTMLDivElement>(null);
+  const badgesRef = useRef<HTMLDivElement>(null);
 
   const handleGenerate = () => {
     if (!isValid) return;
@@ -214,7 +217,7 @@ export default function Home() {
               Tell DUX where you're headed and how you like to travel. Get a day-by-day itinerary tuned to your pace, budget, and taste — refine it in plain words.
             </p>
 
-            <div className="flex flex-wrap gap-3 text-sm font-bold text-ink">
+            <div ref={badgesRef} className="flex flex-wrap gap-3 text-sm font-bold text-ink">
               <span className="flex items-center gap-2 bg-surface border border-line px-4 py-2.5 rounded-full shadow-card-sm">
                 <span className="text-accent text-base">✦</span> Adapts to your constraints
               </span>
@@ -225,13 +228,16 @@ export default function Home() {
           </div>
 
           {/* Form card */}
-          <PlannerForm
-            form={form}
-            onUpdate={update}
-            onToggleInterest={toggleInterest}
-            onSubmit={handleGenerate}
-            isValid={isValid}
-          />
+          <div ref={formCardRef} className="relative z-[1]">
+            <DraggableDuck anchorRef={badgesRef} />
+            <PlannerForm
+              form={form}
+              onUpdate={update}
+              onToggleInterest={toggleInterest}
+              onSubmit={handleGenerate}
+              isValid={isValid}
+            />
+          </div>
         </div>
       </div>
     </div>
