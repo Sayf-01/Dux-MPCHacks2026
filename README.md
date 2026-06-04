@@ -58,11 +58,11 @@ You set your destination, pace, budget, and interests — DUX scores real places
 
 ```bash
 # frontend
-cd /tmp/workspace/Sayf-01/Dux-MPCHacks2026
+cd <project-root>
 npm install
 
 # backend
-cd /tmp/workspace/Sayf-01/Dux-MPCHacks2026/backend
+cd backend
 npm install
 ```
 
@@ -71,13 +71,15 @@ npm install
 Create frontend env:
 
 ```bash
-cp /tmp/workspace/Sayf-01/Dux-MPCHacks2026/.env.local.example /tmp/workspace/Sayf-01/Dux-MPCHacks2026/.env.local
+cp .env.local.example .env.local
 ```
 
 Create backend env:
 
 ```bash
-cp /tmp/workspace/Sayf-01/Dux-MPCHacks2026/backend/.env.example /tmp/workspace/Sayf-01/Dux-MPCHacks2026/backend/.env
+cd backend
+cp .env.example .env
+cd ..
 ```
 
 Frontend `.env.local`:
@@ -102,7 +104,7 @@ PORT=4000
 ### 3) Seed the database
 
 ```bash
-cd /tmp/workspace/Sayf-01/Dux-MPCHacks2026/backend
+cd backend
 npm run seed            # Montréal dataset
 # or
 npm run seed:toronto    # Toronto dataset
@@ -112,11 +114,11 @@ npm run seed:toronto    # Toronto dataset
 
 ```bash
 # terminal 1 (backend)
-cd /tmp/workspace/Sayf-01/Dux-MPCHacks2026/backend
+cd backend
 npm run dev
 
 # terminal 2 (frontend)
-cd /tmp/workspace/Sayf-01/Dux-MPCHacks2026
+cd <project-root>
 npm run dev
 ```
 
@@ -166,5 +168,3 @@ Built for rapid prototyping and demo impact:
 - fast refinement loop with natural language edits
 
 ---
-
-If you want, I can also add a shorter **“dev quickstart”** version and a polished **demo pitch section** with screenshots/GIF placeholders.
