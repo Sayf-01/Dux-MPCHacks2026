@@ -34,8 +34,6 @@ You set your destination, pace, budget, and interests — DUX scores real places
 - Anthropic SDK (backend LLM edit route)
 
 ### AI Providers (frontend API layer)
-- Gemini (`@google/generative-ai`)
-- Anthropic (`@anthropic-ai/sdk`)
 - Groq (`groq-sdk`) for DUXy refinement
 
 ## 🗂️ Project structure
